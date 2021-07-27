@@ -1,0 +1,35 @@
+
+
+run_jobs: [M6_w, M6_cc, M6_cc_w] #list or "all"
+
+settings:
+    - cpu: 100
+    - force: false
+    - do_not_ask: true
+    #- when_fatal: fatal #fatal: fatal in any task, skip: go next tasks
+
+default_job_settings:
+    - init_tune_param: [0, 0, 0, 0, 0]
+    - post_tune: false
+    - tuning_mode: w      #w, z, cc, null(single_run)
+    - cost_adj: 1.0
+    - save_result_files: true
+
+jobs:
+    Prerun_0:
+        - name: "prerun_0"
+        - init_tune_param: [0, 0, 0, 0, 0]
+        - tuning_mode: null      #w, z, cc, null(single_run)
+    M6_w:
+        - name: "M6_w"
+        - layer: 6
+    M6_cc:
+        - name: "M6_cc"
+        - layer: 6
+        - tuning_mode: cc      #w, z, cc, null(single_run)
+    M6_cc_w:
+        - name: "M6_cc_w"
+        - layer: 6
+        - read_z_from: M6_cc
+
+
