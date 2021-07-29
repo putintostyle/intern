@@ -1,7 +1,8 @@
 
 import cmd
 import string, sys
-
+import csv
+from typing import runtime_checkable
 from QAAnalyzer import *
 from QACalibration import Calibrator
 
@@ -176,8 +177,25 @@ class QAAnalyzerShell(QAShellBase):
     def do_plot(self, args):
         """Plot last results"""
         self.qa_analyzer.plot_last_result()
+    def do_calfile(self, args):
+        cmds = args.split()
+        if cmds != 1:
+            pass
+        else:
+            rules = []
+            with open('rules.csv', 'r', newline='') as file:
+                rows = csv.reader(file)
+                for row in rows:
+                    rules.append(row)
+            header = rules[0]
+            rules_data = rules[1:]
+            for rule in rules_data:
+                rule_data_str = "%s %s %s %s %s %s" % ("CDSPW", rule[0], rule[1], rule[2], rule[3], rule[4])
+                self.qa_analyzer.calibrator.add_rule_from_str(rule_data_str)
 
+        
     # shortcuts
     do_g = do_global
     do_r = do_range
     do_p = do_plot
+    do_f = do_calfile
