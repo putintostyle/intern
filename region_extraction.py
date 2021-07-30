@@ -7,13 +7,14 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn import tree
 import sys
 
-if len(sys.argv) == 1:
+if len(sys.argv) == 2:
     TREE_MIN = 20
-elif len(sys.argv) == 2:
-    TREE_MIN = sys.argv[1]
+elif len(sys.argv) == 3:
+    TREE_MIN = sys.argv[2]
 
-
-PATH = ""
+WORK_FOLDER = sys.argv[1]
+DATA_FOLDER = '__tuning__'
+PATH = os.path.join(WORK_FOLDER,DATA_FOLDER)
 
 df = pd.read_csv(os.path.join(PATH, "QAResultData.csv"))
 data = np.array(df.values)
