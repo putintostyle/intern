@@ -10,7 +10,7 @@ import sys
 if len(sys.argv) == 2:
     TREE_MIN = 20
 elif len(sys.argv) == 3:
-    TREE_MIN = sys.argv[2]
+    TREE_MIN = int(sys.argv[2])
 
 WORK_FOLDER = sys.argv[1]
 DATA_FOLDER = '__tuning__'
@@ -136,7 +136,7 @@ for index_of_node in range(0,len(regressor.tree_.threshold)):
 header = [['CD1', 'CD2', 'SP1', 'SP2', 'wext']]
 import csv
 
-with open('rules.csv', 'w', newline='') as file:
+with open(os.path.join(PATH,'rules.csv'), 'w', newline='') as file:
     writer = csv.writer(file)
     writer.writerows(header)
     writer.writerows(region)
