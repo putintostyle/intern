@@ -179,6 +179,8 @@ class QAAnalyzerShell(QAShellBase):
         """Plot last results"""
         self.qa_analyzer.plot_last_result()
     def do_calfile(self, args):
+	if not self.qa_analyzer.calibrator:
+	    self.qa_analyzer.calibrator = Calibrator()
         current_path = os.path.join(os.path.abspath(os.getcwd()),'__tuning__')
         cmds = args.split()
         if (len(cmds) == 1)&('.csv' in cmds[0]):
