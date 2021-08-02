@@ -5,6 +5,7 @@ import csv
 from typing import runtime_checkable
 from QAAnalyzer import *
 from QACalibration import Calibrator
+import os
 
 class QAShellBase(cmd.Cmd):
     def __init__(self):
@@ -172,16 +173,18 @@ class QAAnalyzerShell(QAShellBase):
                 print("Error: not enough args!")
                 return
             rule_data_str = "%s %s %s %s %s %s" % ("CDSPW", cmds[0], cmds[1], cmds[2], cmds[3], cmds[4])
-            self.qa_analyzer.calibra6tor.add_rule_from_str(rule_data_str)
+            self.qa_analyzer.calibrator.add_rule_from_str(rule_data_str)
 
     def do_plot(self, args):
         """Plot last results"""
         self.qa_analyzer.plot_last_result()
     def do_calfile(self, args):
+        current_path = os.path.abspath(os.getcwd())
         cmds = args.split()
         if (len(cmds) == 1)&('.csv' in cmds[0]):
+            file_name = cmds[0]
             rules_from_file = []
-            with open('rules.csv', 'r', newline='') as file:
+            with open(os.join(current_path, file_name), 'r', newline='') as file:
                 rows = csv.reader(file)
                 for row in rows:
                    rules_from_file.append(row)     
