@@ -183,8 +183,6 @@ class QAAnalyzerShell(QAShellBase):
 	    self.qa_analyzer.calibrator = Calibrator()
         current_path = os.path.join(os.path.abspath(os.getcwd()),'__tuning__')
         cmds = args.split()
-        if not self.qa_analyzer.calibrator:#XXX
-            self.qa_analyzer.calibrator = Calibrator()
         if (len(cmds) == 1)&('.csv' in cmds[0]):
             file_name = cmds[0]
             rules_from_file = []
