@@ -2,7 +2,7 @@
 import cmd
 import string, sys
 import csv
-from typing import runtime_checkable
+# from typing import runtime_checkable
 from QAAnalyzer import *
 from QACalibration import Calibrator
 import os
@@ -179,7 +179,9 @@ class QAAnalyzerShell(QAShellBase):
         """Plot last results"""
         self.qa_analyzer.plot_last_result()
     def do_calfile(self, args):
-        current_path = os.path.abspath(os.getcwd())
+	if not self.qa_analyzer.calibrator:
+	    self.qa_analyzer.calibrator = Calibrator()
+        current_path = os.path.join(os.path.abspath(os.getcwd()),'__tuning__')
         cmds = args.split()
         if not self.qa_analyzer.calibrator:#XXX
             self.qa_analyzer.calibrator = Calibrator()
