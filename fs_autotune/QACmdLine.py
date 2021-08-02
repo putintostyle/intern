@@ -194,7 +194,7 @@ class QAAnalyzerShell(QAShellBase):
             if ['CD1', 'CD2', 'SP1', 'SP2', 'wext'] == header:
                 rule_array = rules_from_file[1:]
                 for rule in rule_array:
-                    rule_data_str = "%s %s %s %s %s %s" % ("CDSPW", rule[0], rule[1], rule[2], rule[3], int(rule[4]))
+                    rule_data_str = "%s %s %s %s %s %s" % ("CDSPW", rule[0], rule[1], rule[2], rule[3], int(float(rule[4])))
                     self.qa_analyzer.calibrator.add_rule_from_str(rule_data_str)
             else:
                 print('wrong header')
