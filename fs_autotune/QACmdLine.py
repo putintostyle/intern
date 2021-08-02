@@ -181,10 +181,12 @@ class QAAnalyzerShell(QAShellBase):
     def do_calfile(self, args):
         current_path = os.path.abspath(os.getcwd())
         cmds = args.split()
+        if not self.qa_analyzer.calibrator:#XXX
+            self.qa_analyzer.calibrator = Calibrator()
         if (len(cmds) == 1)&('.csv' in cmds[0]):
             file_name = cmds[0]
             rules_from_file = []
-            with open(os.join(current_path, file_name), 'r', newline='') as file:
+            with open(os.path.join(current_path, file_name), 'r', newline='') as file:
                 rows = csv.reader(file)
                 for row in rows:
                    rules_from_file.append(row)     
