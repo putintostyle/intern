@@ -232,7 +232,7 @@ class QAAnalyzerShell(QAShellBase):
                 os.system('region_extraction.py -l {} -r {} -tn {} -wd {}'.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
             else:
                 os.system('region_extraction.py -l {} -r {} -tn {} -wd {}'.format(layer, sram, 20, os.path.abspath(os.getcwd())))
-    def do_autocal(self):
+    def do_autocal(self,args):
         if not self.qa_analyzer.calibrator:
             self.qa_analyzer.calibrator = Calibrator()
         current_path = os.path.join(os.path.abspath(os.getcwd()))
