@@ -216,22 +216,22 @@ class QAAnalyzerShell(QAShellBase):
             if file_operation == 'auto':
                 if '-t' in cmds:
                     tree_number = cmds[cmds.index('-t')+1]
-                    os.system('python region_extraction.py -l {} -r {} --case_file_name -tn {} -wd{}'.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
+                    os.system('region_extraction.py -l {} -r {} --case_file_name -tn {} -wd{}'.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
                 else:
-                    os.system('python region_extraction.py -l {} -r {} --case_file_name -wd{}'.format(layer, sram, os.path.abspath(os.getcwd())))
+                    os.system('region_extraction.py -l {} -r {} --case_file_name -wd{}'.format(layer, sram, os.path.abspath(os.getcwd())))
 
             else:
                 if '-t' in cmds:
                     tree_number = cmds[cmds.index('-t')+1]
-                    os.system('python region_extraction.py -l {} -r {} --manul_file_name {} -tn {} -wd{}'.format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd())))
+                    os.system('region_extraction.py -l {} -r {} --manul_file_name {} -tn {} -wd{}'.format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd())))
                 else:
-                    os.system('python region_extraction.py -l {} -r {} --manul_file_name {} -wd{}'.format(layer, sram, file_operation, os.path.abspath(os.getcwd())))
+                    os.system('region_extraction.py -l {} -r {} --manul_file_name {} -wd{}'.format(layer, sram, file_operation, os.path.abspath(os.getcwd())))
         else:
             if '-t' in cmds:
                 tree_number = cmds[cmds.index('-t')+1]
-                os.system('python region_extraction.py -l {} -r {} -tn {} -wd{}'.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
+                os.system('region_extraction.py -l {} -r {} -tn {} -wd{}'.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
             else:
-                os.system('python region_extraction.py -l {} -r {} -tn {} -wd{}'.format(layer, sram, 20, os.path.abspath(os.getcwd())))
+                os.system('region_extraction.py -l {} -r {} -tn {} -wd{}'.format(layer, sram, 20, os.path.abspath(os.getcwd())))
     def do_autocal(self):
         if not self.qa_analyzer.calibrator:
             self.qa_analyzer.calibrator = Calibrator()
