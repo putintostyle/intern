@@ -8,7 +8,10 @@ from sklearn import tree
 import sys
 import csv
 import argparse
-
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--layer", type = int, help="identify the layer")
 parser.add_argument('-r', '--sram', help="select cases. o: sram only, n: no sram")
@@ -25,7 +28,7 @@ WORK_FOLDER = parameters.working_dir
 ## 
 # TODO: If folder... else...
 ##
-DATA_FOLDER = '__tunning__'
+DATA_FOLDER = ''
 PATH = os.path.join(WORK_FOLDER,DATA_FOLDER)
 ## 
 # TODO: If file_name... else...
