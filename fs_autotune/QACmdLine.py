@@ -209,7 +209,7 @@ class QAAnalyzerShell(QAShellBase):
         cmds = args.split()
         layer = self.qa_analyzer.settings.layer[0]
         sram = self.qa_analyzer.settings.sram[0]
-        current_path = os.path.join(os.path.abspath(os.getcwd())
+        current_path = os.path.join(os.path.abspath(os.getcwd()))
 
         if '-f' in cmds:
             file_operation = cmds[cmds.index('-f')+1]
