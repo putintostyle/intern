@@ -235,6 +235,8 @@ class QAAnalyzerShell(QAShellBase):
     def do_autocal(self):
         if not self.qa_analyzer.calibrator:
             self.qa_analyzer.calibrator = Calibrator()
+        current_path = os.path.join(os.path.abspath(os.getcwd()))
+        rules_from_file = []
         with open(os.path.join(current_path, 'rules.csv'), 'r', newline='') as file:
             rows = csv.reader(file)
             for row in rows:
