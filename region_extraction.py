@@ -25,7 +25,7 @@ WORK_FOLDER = parameters.working_dir
 ## 
 # TODO: If folder... else...
 ##
-DATA_FOLDER = '__tuning__'
+DATA_FOLDER = '__tunning__'
 PATH = os.path.join(WORK_FOLDER,DATA_FOLDER)
 ## 
 # TODO: If file_name... else...
@@ -151,13 +151,13 @@ for index_of_node in range(0,len(regressor.tree_.threshold)):
             continue
 header = [['CD1', 'CD2', 'SP1', 'SP2', 'wext']]
 
-if parameters.namual_file_name:
+if parameters.manul_file_name:
     with open(os.path.join(PATH, parameters.file_name +'_rules.csv'), 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(header)
         writer.writerows(region)
 elif parameters.case_file_name:
-    output_name = 'M{}_{}sram_rules'.format{parameters.layer, parameters.sram}
+    output_name = 'M{}_{}sram_rules'.format(parameters.layer, parameters.sram)
     with open(os.path.join(PATH, output_name +'.csv'), 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(header)
