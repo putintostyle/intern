@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import pandas as pd
 import numpy as np
 import os
@@ -8,10 +9,7 @@ from sklearn import tree
 import sys
 import csv
 import argparse
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--layer", type = int, help="identify the layer")
 parser.add_argument('-r', '--sram', help="select cases. o: sram only, n: no sram")
