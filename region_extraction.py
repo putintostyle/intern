@@ -26,7 +26,7 @@ WORK_FOLDER = parameters.working_dir
 ## 
 # TODO: If folder... else...
 ##
-DATA_FOLDER = '__tunning__'
+DATA_FOLDER = '__tuning__'
 PATH = os.path.join(WORK_FOLDER,DATA_FOLDER)
 ## 
 # TODO: If file_name... else...
