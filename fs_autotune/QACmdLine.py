@@ -181,6 +181,8 @@ class QAAnalyzerShell(QAShellBase):
     def do_calfile(self, args):
         if not self.qa_analyzer.calibrator:
             self.qa_analyzer.calibrator = Calibrator()
+        print(self.qa_analyzer.setting.pattern)
+        
         current_path = os.path.join(os.path.abspath(os.getcwd()),'__tuning__')
         cmds = args.split()
         if (len(cmds) == 1)&('.csv' in cmds[0]):
