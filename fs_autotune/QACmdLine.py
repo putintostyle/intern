@@ -181,7 +181,7 @@ class QAAnalyzerShell(QAShellBase):
     def do_calfile(self, args):
         if not self.qa_analyzer.calibrator:
             self.qa_analyzer.calibrator = Calibrator()
-        print(self.qa_analyzer.settings.layer)
+        # print(self.qa_analyzer.settings.layer)
         current_path = os.path.join(os.path.abspath(os.getcwd()),'__tuning__')
         cmds = args.split()
         if (len(cmds) == 1)&('.csv' in cmds[0]):
@@ -204,7 +204,49 @@ class QAAnalyzerShell(QAShellBase):
                 print("require file name")
             elif ('.csv' not in cmds[0]):
                 print("require csv file")
-        
+    def do_autotune(self, args):
+        # usage: -f file_name(auto), -t tree_number 
+        cmds = args.split()
+        layer = self.qa_analyzer.settings.layer[0]
+        sram = self.qa_analyzer.settings.sram[0]
+        current_path = os.path.join(os.path.abspath(os.getcwd())
+
+        if '-f' in cmds:
+            file_operation = cmds[cmds.index('-f')+1]
+            if file_operation == 'auto':
+                if '-t' in cmds:
+                    tree_number = cmds[cmds.index('-t')+1]
+                    os.system('python region_extraction.py -l {} -r {} --case_file_name -tn {} -wd{}'.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
+                else:
+                    os.system('python region_extraction.py -l {} -r {} --case_file_name -wd{}'.format(layer, sram, os.path.abspath(os.getcwd())))
+
+            else:
+                if '-t' in cmds:
+                    tree_number = cmds[cmds.index('-t')+1]
+                    os.system('python region_extraction.py -l {} -r {} --manul_file_name {} -tn {} -wd{}'.format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd())))
+                else:
+                    os.system('python region_extraction.py -l {} -r {} --manul_file_name {} -wd{}'.format(layer, sram, file_operation, os.path.abspath(os.getcwd())))
+        else:
+            if '-t' in cmds:
+                tree_number = cmds[cmds.index('-t')+1]
+                os.system('python region_extraction.py -l {} -r {} -tn {} -wd{}'.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
+            else:
+                os.system('python region_extraction.py -l {} -r {} -tn {} -wd{}'.format(layer, sram, 20, os.path.abspath(os.getcwd())))
+    def do_autocal(self):
+        if not self.qa_analyzer.calibrator:
+            self.qa_analyzer.calibrator = Calibrator()
+        with open(os.path.join(current_path, 'rules.csv'), 'r', newline='') as file:
+            rows = csv.reader(file)
+            for row in rows:
+                rules_from_file.append(row)     
+        header = rules_from_file[0]
+        if ['CD1', 'CD2', 'SP1', 'SP2', 'wext'] == header:
+            rule_array = rules_from_file[1:]
+            for rule in rule_array:
+                rule_data_str = "%s %s %s %s %s %s" % ("CDSPW", int(float(rule[0])), int(float(rule[1])), int(float(rule[2])), int(float(rule[3])), int(float(rule[4])))
+                self.qa_analyzer.calibrator.add_rule_from_str(rule_data_str)
+        else:
+            print('wrong header')
     # shortcuts
     do_g = do_global
     do_r = do_range

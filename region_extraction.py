@@ -6,22 +6,38 @@ from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor
 from sklearn import tree
 import sys
+import csv
+import argparse
 
-if len(sys.argv) == 2:
-    TREE_MIN = 20
-elif len(sys.argv) == 3:
-    TREE_MIN = int(sys.argv[2])
+parser = argparse.ArgumentParser()
+parser.add_argument("-l", "--layer", type = int, help="identify the layer")
+parser.add_argument('-r', '--sram', help="select cases. o: sram only, n: no sram")
+# parser.add_argument('--o', action='store_true', help = 'specify')
+parser.add_argument("--case_file_name", action='store_true', help='named the output rules')
+parser.add_argument("--manul_file_name", action='store_true', help='named the output rules')
+parser.add_argument('-o', '--file_name', help = 'specify the file name of output rules')
+parser.add_argument('-tn', '--tree_number', type = int, help = 'the minimum leaf')
+parser.add_argument('-wd', '--working_dir', help = 'where data is stored') ## path exclude __tunning__
+parameters = parser.parse_args()
 
-WORK_FOLDER = sys.argv[1]
+
+WORK_FOLDER = parameters.working_dir
+## 
+# TODO: If folder... else...
+##
 DATA_FOLDER = '__tuning__'
 PATH = os.path.join(WORK_FOLDER,DATA_FOLDER)
-
+## 
+# TODO: If file_name... else...
+##
 df = pd.read_csv(os.path.join(PATH, "QAResultData.csv"))
 data = np.array(df.values)
 df_keys = np.array([[eval(i)[0], eval(i)[1]] for i in data[:,0]])
 
- 
-logi_pool = [(file_name[0][:2] == 'M'+str(1))&(file_name[0][2] == 'M')&('SRM' not in file_name[0]) for file_name in df_keys] 
+if parameters.sram == 'n':
+    logi_pool = [(file_name[0][:2] == 'M'+str(parameters.layer))&(file_name[0][2] == 'M')&('SRM' not in file_name[0]) for file_name in df_keys] 
+else:
+    logi_pool = [(file_name[0][:2] == 'M'+str(parameters.layer))&(file_name[0][2] == 'M')&('SRM' in file_name[0]) for file_name in df_keys] 
 
 parameter = df_keys[logi_pool][:,1]
 Ct_err = data[logi_pool][:,2]
@@ -33,7 +49,7 @@ train_X = np.array([[CD[i], SP[i]] for i in range(0, len(CD), 2)])
 #(Ct_err1*wext2 - Ct_err2*wext1)/(Ct_err1 - Ct_err2)
 train_Y = np.array([(Ct_err[i]*parameter[i+1][0]-Ct_err[i+1]*parameter[i][0])/(Ct_err[i]-Ct_err[i+1]) for i in range(0, len(Ct_err), 2)])
 
-regressor = DecisionTreeRegressor(random_state=0, min_samples_leaf = TREE_MIN)
+regressor = DecisionTreeRegressor(random_state=0, min_samples_leaf = parameters.tree_number)
 regressor.fit(train_X, train_Y)
 def split(array, dim, thred):
     if dim == 0:
@@ -134,9 +150,20 @@ for index_of_node in range(0,len(regressor.tree_.threshold)):
         else:
             continue
 header = [['CD1', 'CD2', 'SP1', 'SP2', 'wext']]
-import csv
 
-with open(os.path.join(PATH,'rules.csv'), 'w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerows(header)
-    writer.writerows(region)
+if parameters.namual_file_name:
+    with open(os.path.join(PATH, parameters.file_name +'_rules.csv'), 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(header)
+        writer.writerows(region)
+elif parameters.case_file_name:
+    output_name = 'M{}_{}sram_rules'.format{parameters.layer, parameters.sram}
+    with open(os.path.join(PATH, output_name +'.csv'), 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(header)
+        writer.writerows(region)
+else:
+    with open(os.path.join(PATH, 'rules.csv'), 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(header)
+        writer.writerows(region)
