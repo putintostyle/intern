@@ -105,7 +105,7 @@ class Calibrator:
             ## check is overlapped or not
             for rule in rs.rules:
                 ## rule = {'CD1': 'CD2': 'SP1': 'SP2': 'dW':}
-                if (rule.data['CD1']<= region[1]) & (rule.data['CD2']>= region[0]) & (rule.data['SP1']<= region[4]) & (rule.data['SP2']>= region[3]):
+                if (rule.data['CD1']<= region[1]) & (rule.data['CD2']>= region[0]) & (rule.data['SP1']<= region[3]) & (rule.data['SP2']>= region[2]):
                     CD1, CD2 = (max(int(rule.data['CD1']), int(region[0])), min(int(rule.data['CD2']), int(region[1])))
                     SP1, SP2 = (max(int(rule.data['SP1']), int(region[2])), min(int(rule.data['SP2']), int(region[3])))
                     self.segment_rule.append([CD1, CD2, SP1, SP2, rule['dW']])
