@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 
+from typing import runtime_checkable
 class Calibrator:
 
     """Docstring for Calibrator. """
@@ -8,7 +9,7 @@ class Calibrator:
     def __init__(self):
         """TODO: to be defined. """
         self.rule_set_list = [] #XXX
-    
+        self.segment_rule = []
     def apply(self, arg1):
         """TODO: Docstring for apply.
 
@@ -96,6 +97,21 @@ class Calibrator:
         for rs in self.rule_set_list:
             print("rule set:")
             rs.print_all()
+    # rule_set_list contains only constructor
+
+    def print_region_cond(self, region): # region = [CD1, CD2, SP1, SP2]
+        self.segment_rule = []
+        for rs in self.rule_set_list:
+            ## check is overlapped or not
+            for rule in rs.rules:
+                ## rule = {'CD1': 'CD2': 'SP1': 'SP2': 'dW':}
+                if (rule['CD1']<= region[1]) & (rule['CD2']<= region[0]) & (rule['SP1']<= region[3]) & (rule['SP21']<= region[4]):
+                    CD1, CD2 = (max(int(rule['CD1']), int(region[0])), min(int(rule['CD2']), int(region[1])))
+                    SP1, SP2 = (max(int(rule['SP1']), int(region[2])), min(int(rule['SP2']), int(region[3])))
+                    self.segment_rule.append([CD1, CD2, SP1, SP2, rule['dW']])
+                    ## need to do：print rules
+                    ## need to do：show region cal result
+                    ## need to do：plot region
 
 class CalRuleSetBuilder:
 
