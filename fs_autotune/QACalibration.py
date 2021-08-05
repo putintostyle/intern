@@ -109,9 +109,10 @@ class Calibrator:
                     CD1, CD2 = (max(int(rule['CD1']), int(region[0])), min(int(rule['CD2']), int(region[1])))
                     SP1, SP2 = (max(int(rule['SP1']), int(region[2])), min(int(rule['SP2']), int(region[3])))
                     self.segment_rule.append([CD1, CD2, SP1, SP2, rule['dW']])
+                    print('{} <= CD <= {}, {} <= SP <= {}, wext = {}'.format(CD1, CD2, SP1, SP2, rule['dW']))
                     ## need to do：print rules
                     ## need to do：show region cal result
-                    ## need to do：plot region
+                    ## need to do：plot region 
 
 class CalRuleSetBuilder:
 
