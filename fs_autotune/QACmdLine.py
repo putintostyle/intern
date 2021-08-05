@@ -249,6 +249,10 @@ class QAAnalyzerShell(QAShellBase):
                 self.qa_analyzer.calibrator.add_rule_from_str(rule_data_str)
         else:
             print('wrong header')
+    def do_readcal(self, args):
+        # usage: readcal CD1 CD2 SP1 SP2
+        cmds = args.split()
+        self.qa_analyzer.calibrator.print_region_cond(cmds)
     # shortcuts
     do_g = do_global
     do_r = do_range
