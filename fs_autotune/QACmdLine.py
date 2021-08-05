@@ -251,7 +251,7 @@ class QAAnalyzerShell(QAShellBase):
             print('wrong header')
     def do_readcal(self, args):
         # usage: readcal CD1 CD2 SP1 SP2
-        cmds = args.split()
+        cmds = [int(i) for i  in args.split()]
         self.qa_analyzer.calibrator.print_region_cond(cmds)
     # shortcuts
     do_g = do_global
