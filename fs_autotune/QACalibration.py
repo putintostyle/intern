@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from QAAnalyzer import *
+
 # from typing import runtime_checkable
 class Calibrator:
 
@@ -10,7 +10,7 @@ class Calibrator:
         """TODO: to be defined. """
         self.rule_set_list = [] #XXX
         self.segment_rule = []
-        self.qa_analyzer = qa_analyzer
+        
     def apply(self, arg1):
         """TODO: Docstring for apply.
 
@@ -126,18 +126,7 @@ class Calibrator:
         if clean_all == True:
             self.clean_region()
 
-    def show_stat(self, region):
-        if self.segment_rule == []:
-            self.specify_region(region)
-        
-        for seg_region in self.segment_rule:
-            self.qa_analyzer.settings.CDSP_range = True
-            self.qa_analyzer.settings.CDSP_range_param['CD1'] = int(seg_region[0])
-            self.qa_analyzer.settings.CDSP_range_param['CD2'] = int(seg_region[1])
-            self.qa_analyzer.settings.CDSP_range_param['SP1'] = int(seg_region[2])
-            self.qa_analyzer.settings.CDSP_range_param['SP2'] = int(seg_region[3])
-            self.qa_analyzer.settings.CDSP_range_param['wext'] = None
-            self.qa_analyzer.run(calibration=True)
+    
 
 
 
