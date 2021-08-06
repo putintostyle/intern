@@ -82,19 +82,21 @@ class QAAnalyzerBase:
         """
         raise NotImplementedError("QAAnalyzerBase: run function not implemented!")
     
-    def print_statistics(self, results, filename=""):
+
+    def print_statistics(self, results, filename="", brief_stat = False):
         """main for run.
 
         :arg1: TODO
         :returns: TODO
 
         """
-        self.logger.info('get statistics results')
-        if filename and filename != "":
-            fh = open(filename, 'w')
-        else:
-            fh = sys.stdout
-
+        if brief_stat == False:
+            self.logger.info('get statistics results')
+            if filename and filename != "":
+                fh = open(filename, 'w')
+            else:
+                fh = sys.stdout
+        
 
         result = results
 
@@ -362,7 +364,7 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         self.calibrator = None
 
     
-    def run(self, calibration = False):
+    def run(self, calibration = False, brief_stat = False):
         """main for run.
 
         :arg1: TODO
@@ -379,7 +381,10 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         self.opt_wext = self.estimate_optimized_wext(None)
         if calibration:
             if self.calibrator:
-                self.apply_calibration_rule()
+                if brief_stat:
+                    self.apply_calibration_rule(brief_stat)
+                else:
+                    self.apply_calibration_rule()
             else:
                 print("No calibration rule!!")
         else:
@@ -608,11 +613,15 @@ class QAWidthAnalyzer(QAAnalyzerBase):
             self.resultsList_with_opt_w.append((new_diff, -100, CD, SP))
             self.last_results = self.resultsList_with_opt_w
 
-    def apply_calibration_rule(self):
+    def apply_calibration_rule(self, brief_stat = False):
         self._apply_w_rule(calibrator=self.calibrator)
         print('-'*80)
         print("Applying calibration w rule (prediction)")
-        self.print_statistics(self.resultsList_with_opt_w)
+
+        if brief_stat:
+            self.print_statistics(self.resultsList_with_opt_w, brief_stat)
+        else:
+            self.print_statistics(self.resultsList_with_opt_w)
         self.last_results = self.resultsList_with_opt_w
 
     def apply_w_rule(self, opt_wext):
