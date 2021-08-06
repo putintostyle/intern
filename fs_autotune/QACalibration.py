@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# from QAAnalyzer import *
+from QAAnalyzer import *
 # from typing import runtime_checkable
 class Calibrator:
 
@@ -10,7 +10,7 @@ class Calibrator:
         """TODO: to be defined. """
         self.rule_set_list = [] #XXX
         self.segment_rule = []
-        # self.qa_analyzer = qa_analyzer
+        self.qa_analyzer = qa_analyzer
     def apply(self, arg1):
         """TODO: Docstring for apply.
 
