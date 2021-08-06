@@ -257,7 +257,18 @@ class QAAnalyzerShell(QAShellBase):
 
     def do_regioncal(self, args):
         cmds = [int(i) for i  in args.split()]  
-        self.qa_analyzer.calibrator.show_stat(cmds)
+        
+        if self.qa_analyzer.calibrator.segment_rule == []:
+            self.qa_analyzer.calibrator.specify_region(cmds, isprint=False)
+        
+        for seg_region in self.qa_analyzer.calibrator.segment_rule:
+            self.qa_analyzer.settings.CDSP_range = True
+            self.qa_analyzer.settings.CDSP_range_param['CD1'] = int(seg_region[0])
+            self.qa_analyzer.settings.CDSP_range_param['CD2'] = int(seg_region[1])
+            self.qa_analyzer.settings.CDSP_range_param['SP1'] = int(seg_region[2])
+            self.qa_analyzer.settings.CDSP_range_param['SP2'] = int(seg_region[3])
+            self.qa_analyzer.settings.CDSP_range_param['wext'] = None
+            self.qa_analyzer.run(calibration=True)
         
     do_g = do_global
     do_r = do_range
