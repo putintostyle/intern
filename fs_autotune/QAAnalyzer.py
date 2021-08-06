@@ -90,12 +90,12 @@ class QAAnalyzerBase:
         :returns: TODO
 
         """
-        if brief_stat == False:
-            self.logger.info('get statistics results')
-            if filename and filename != "":
-                fh = open(filename, 'w')
-            else:
-                fh = sys.stdout
+        
+        self.logger.info('get statistics results')
+        if filename and filename != "":
+            fh = open(filename, 'w')
+        else:
+            fh = sys.stdout
         
 
         result = results
@@ -619,7 +619,8 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         print("Applying calibration w rule (prediction)")
 
         if brief_stat:
-            self.print_statistics(self.resultsList_with_opt_w, brief_stat)
+            self.print_statistics(self.resultsList_with_opt_w)
+            print('false')
         else:
             self.print_statistics(self.resultsList_with_opt_w)
         self.last_results = self.resultsList_with_opt_w
