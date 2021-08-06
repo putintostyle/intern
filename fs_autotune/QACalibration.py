@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-
+# from QAAnalyzer import *
 # from typing import runtime_checkable
 class Calibrator:
 
@@ -10,6 +10,7 @@ class Calibrator:
         """TODO: to be defined. """
         self.rule_set_list = [] #XXX
         self.segment_rule = []
+        # self.qa_analyzer = qa_analyzer
     def apply(self, arg1):
         """TODO: Docstring for apply.
 
@@ -98,21 +99,48 @@ class Calibrator:
             print("rule set:")
             rs.print_all()
     # rule_set_list contains only constructor
+    def clean_region(self):
+        self.segment_rule = []
 
-    def print_region_cond(self, region): # region = [CD1, CD2, SP1, SP2]
+    def specify_region(self, region, isprint = False, clean_all = False): 
+        # region = [CD1, CD2, SP1, SP2]
         self.segment_rule = []
         for rs in self.rule_set_list:
             ## check is overlapped or not
             for rule in rs.rules:
                 ## rule = {'CD1': 'CD2': 'SP1': 'SP2': 'dW':}
-                if (rule.data['CD1']<= region[1]) & (rule.data['CD2']>= region[0]) & (rule.data['SP1']<= region[3]) & (rule.data['SP2']>= region[2]):
+                # if (rule.data['CD1']<= region[1]) & (rule.data['CD2']>= region[0]) & (rule.data['SP1']<= region[3]) & (rule.data['SP2']>= region[2]):
+                if rule.is_overlapped(region):
                     CD1, CD2 = (max(int(rule.data['CD1']), int(region[0])), min(int(rule.data['CD2']), int(region[1])))
                     SP1, SP2 = (max(int(rule.data['SP1']), int(region[2])), min(int(rule.data['SP2']), int(region[3])))
                     self.segment_rule.append([CD1, CD2, SP1, SP2, rule.data['dW']])
-                    print('{} <= CD <= {}, {} <= SP <= {}, wext = {}'.format(CD1, CD2, SP1, SP2, rule.data['dW']))
+                    if isprint:
+                        print('{} <= CD <= {}, {} <= SP <= {}, wext = {}'.format(CD1, CD2, SP1, SP2, rule.data['dW']))
+                    else:
+                        continue
+                else:
+                    continue
                     ## need to do：print rules
                     ## need to do：show region cal result
                     ## need to do：plot region 
+        if clean_all == True:
+            self.clean_region()
+
+    def show_stat(self, region):
+        if self.segment_rule == []:
+            self.specify_region(region)
+        
+        for seg_region in self.segment_rule:
+            self.qa_analyzer.settings.CDSP_range = True
+            self.qa_analyzer.settings.CDSP_range_param['CD1'] = int(seg_region[0])
+            self.qa_analyzer.settings.CDSP_range_param['CD2'] = int(seg_region[1])
+            self.qa_analyzer.settings.CDSP_range_param['SP1'] = int(seg_region[2])
+            self.qa_analyzer.settings.CDSP_range_param['SP2'] = int(seg_region[3])
+            self.qa_analyzer.settings.CDSP_range_param['wext'] = None
+            self.qa_analyzer.run(calibration=True)
+
+
+
 
 class CalRuleSetBuilder:
 
@@ -334,7 +362,13 @@ class CalWRule(CalibrationRuleBase):
             return self.data['dW']
         else:
             return None
-
+    def is_overlapped(self, region):
+        if (self.data['CD1']<= region[1]) & (self.data['CD2']>= region[0]) & (self.data['SP1']<= region[3]) & (self.data['SP2']>= region[2]):
+            # CD1, CD2 = (max(int(self.data['CD1']), int(region[0])), min(int(self.data['CD2']), int(region[1])))
+            # SP1, SP2 = (max(int(self.data['SP1']), int(region[2])), min(int(self.data['SP2']), int(region[3])))
+            return True
+        else:
+            return False
     #def get_rule_by_CDSP(self, cd1, cd2, sp1, sp2):
     #    """TODO: Docstring for get_rule_by_CDSP.
 

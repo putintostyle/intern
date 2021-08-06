@@ -252,8 +252,13 @@ class QAAnalyzerShell(QAShellBase):
     def do_readcal(self, args):
         # usage: readcal CD1 CD2 SP1 SP2
         cmds = [int(i) for i  in args.split()]
-        self.qa_analyzer.calibrator.print_region_cond(cmds)
+        self.qa_analyzer.calibrator.specify_region(cmds, isprint=True)
     # shortcuts
+
+    def do_regioncal(self, args):
+        cmds = [int(i) for i  in args.split()]  
+        self.qa_analyzer.calibrator.show_stat(cmds)
+        
     do_g = do_global
     do_r = do_range
     do_p = do_plot
