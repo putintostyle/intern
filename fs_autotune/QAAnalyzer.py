@@ -407,7 +407,7 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         self.calculate_expected_wext(None) #XXX: need refactor
         self.output_wext_result()
         self.opt_wext = self.estimate_optimized_wext(None)
-        self.apply_calibration_rule(print_origin = False)
+        self.apply_calibration_rule()
 
     def cost(self, result):
         """cost function.
