@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+from re import I
 import sys
 import time
 import logging
@@ -399,12 +400,14 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         show_plot_result = not self.settings.no_plot_show
         #self.output_wext_fit_result(plot_result, show_plot_result)
         self.logger.info('Analyzer... End')
-    def region_run(self):
-        # self.build_regression_data(None)
+    def region_run(self, po_flag = False):
+        # before calibarate, after calibarate
+
+        self.build_regression_data(po_flag)
         self.calculate_expected_wext(None) #XXX: need refactor
         self.output_wext_result()
         self.opt_wext = self.estimate_optimized_wext(None)
-        self.apply_calibration_rule()
+        self.apply_calibration_rule(print_origin = False)
 
     def cost(self, result):
         """cost function.
@@ -418,7 +421,7 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         return (result[2]/spec)**2 # normalize spec to 1
 
 
-    def build_regression_data(self, arg1):
+    def build_regression_data(self, arg1, print_origin = True):
         """build regression data for wext calculation and fitting
 
         :arg1: TODO
@@ -467,7 +470,10 @@ class QAWidthAnalyzer(QAAnalyzerBase):
 
             #show all layer statistics
             #print(result_list)
-            self.print_statistics(result_list) #print on screen
+            if (print_origin) & (itr == 0): # print only without cal
+                self.print_statistics(result_list) #print on screen
+            else:
+                self.print_statistics(result_list)
             self.logger.info('Analyzer... End')
             
             
