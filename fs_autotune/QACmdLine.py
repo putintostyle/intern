@@ -268,7 +268,7 @@ class QAAnalyzerShell(QAShellBase):
             self.qa_analyzer.settings.CDSP_range_param['SP1'] = int(seg_region[2])
             self.qa_analyzer.settings.CDSP_range_param['SP2'] = int(seg_region[3])
             self.qa_analyzer.settings.CDSP_range_param['wext'] = None
-            self.qa_analyzer.apply_calibration_rule(calibration=True, brief_stat = True)
+            self.qa_analyzer.apply_calibration_rule()
     # def do_    
     do_g = do_global
     do_r = do_range
