@@ -268,7 +268,7 @@ class QAAnalyzerShell(QAShellBase):
             self.qa_analyzer.settings.CDSP_range_param['SP1'] = int(seg_region[2])
             self.qa_analyzer.settings.CDSP_range_param['SP2'] = int(seg_region[3])
             self.qa_analyzer.settings.CDSP_range_param['wext'] = None
-            self.qa_analyzer.region_run(po_flag = True)
+            self.qa_analyzer.region_run(po_flag = False)
     ## To do
     ## def do_diff (region) show statistical info and plot the difference
     ## def do_selregion () ginput to draw the region to cal
