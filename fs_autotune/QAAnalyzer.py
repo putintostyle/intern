@@ -400,11 +400,12 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         #self.output_wext_fit_result(plot_result, show_plot_result)
         self.logger.info('Analyzer... End')
     def region_run(self):
-        self.build_regression_data(None)
+        # self.build_regression_data(None)
         self.calculate_expected_wext(None) #XXX: need refactor
         self.output_wext_result()
         self.opt_wext = self.estimate_optimized_wext(None)
         self.apply_calibration_rule()
+
     def cost(self, result):
         """cost function.
 
