@@ -414,10 +414,14 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         self.nocal = self.nocal[0]
         self.withcal = self.withcal[0]
         print('   count  n(>=0)  n(<0)     min     max    mean  2-sigma')
-        print('   Before Calibration')
+        print('-'*20)
+        print('|Before Calibration|')
+        print('-'*20)
         print( '[Ct] {:3}  {:5}  {:5}   {:6.2f}% {:6.2f}% {:6.2f}% {:6.2f}%'.format(self.nocal[0],self.nocal[1],self.nocal[2],self.nocal[3],self.nocal[4], self.nocal[5], self.nocal[6])) 
         print('-'*80)
+        print('-'*20)
         print('    After Calibration')
+        print('-'*20)
         print( '[Ct] {:3}  {:5}  {:5}   {:6.2f}% {:6.2f}% {:6.2f}% {:6.2f}%'.format(self.withcal[0],self.withcal[1],self.withcal[2],self.withcal[3],self.withcal[4], self.withcal[5], self.withcal[6]))
         
     def cost(self, result):
