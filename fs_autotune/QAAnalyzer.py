@@ -429,7 +429,7 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         spec = 2.0*self.settings.cost_adjust
         return (result[2]/spec)**2 # normalize spec to 1
 
-    def build_regression_data(self, arg1, no_print = False):
+    def build_regression_data(self, arg1 = None, no_print = False):
         """build regression data for wext calculation and fitting
 
         :arg1: TODO
