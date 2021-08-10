@@ -124,7 +124,7 @@ class Calibrator:
                     ## need to do：show region cal result
                     ## need to do：plot region 
         
-        self.clean_region()
+        
 
     
 
