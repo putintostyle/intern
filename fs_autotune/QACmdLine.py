@@ -256,11 +256,11 @@ class QAAnalyzerShell(QAShellBase):
     # shortcuts
 
     def do_regioncal(self, args):
-        cmds = [int(i) for i  in args.split()]  
+        #usage: regioncal [-s] [-show] region
+        cmds = [int(i) for i  in args.split()]
         
-        if self.qa_analyzer.calibrator.segment_rule == []:
-            self.qa_analyzer.calibrator.specify_region(cmds, isprint=False)
-        
+        self.qa_analyzer.calibrator.specify_region(cmds[-4:], isprint=('-s' in cmds))
+                
         for seg_region in self.qa_analyzer.calibrator.segment_rule:
             self.qa_analyzer.settings.CDSP_range = True
             self.qa_analyzer.settings.CDSP_range_param['CD1'] = int(seg_region[0])
@@ -268,7 +268,11 @@ class QAAnalyzerShell(QAShellBase):
             self.qa_analyzer.settings.CDSP_range_param['SP1'] = int(seg_region[2])
             self.qa_analyzer.settings.CDSP_range_param['SP2'] = int(seg_region[3])
             self.qa_analyzer.settings.CDSP_range_param['wext'] = None
+            print('='*80)
+            print('region in {} <= CD <= {}, {} <= SP <= {}, wext = {}'.format(seg_region[0], seg_region[1], seg_region[2], seg_region[3], seg_region[4]))
             self.qa_analyzer.region_run()
+        print('='*80)
+        self.qa_analyzer.calibrator.clean_region()
     ## To do
     def do_diff (self, region): # show statistical info and plot the difference
         pass

@@ -409,15 +409,15 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         self.withcal = []
 
         self.build_regression_data(no_print = True)
-        # self.calculate_expected_wext(None) #XXX: need refactor
-        # self.output_wext_result()
-        # self.opt_wext = self.estimate_optimized_wext(None)
         self._apply_w_rule(calibrator=self.calibrator)
         self.withcal.append(self.print_statistics(self.resultsList_with_opt_w, store=True))
-        print(self.nocal)
-        print('-'*20)
-        print(self.withcal)
-
+        print('   count  n(>=0)  n(<0)     min     max    mean  2-sigma')
+        print('   Before Calibration')
+        print( '[Ct] {:3}  {:5}  {:5}   {:6.2f}% {:6.2f}% {:6.2f}% {:6.2f}%'.format(self.nocal[0],self.nocal[1],self.nocal[2],self.nocal[3],self.nocal[4], self.nocal[5], self.nocal[6])) 
+        print('-'*80)
+        print('    After Calibration')
+        print( '[Ct] {:3}  {:5}  {:5}   {:6.2f}% {:6.2f}% {:6.2f}% {:6.2f}%'.format(self.withcal[0],self.withcal[1],self.withcal[2],self.withcal[3],self.withcal[4], self.withcal[5], self.withcal[6]))
+        
     def cost(self, result):
         """cost function.
 

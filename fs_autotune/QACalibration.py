@@ -101,8 +101,8 @@ class Calibrator:
     # rule_set_list contains only constructor
     def clean_region(self):
         self.segment_rule = []
-
-    def specify_region(self, region, isprint = False, clean_all = False): 
+    
+    def specify_region(self, region, isprint = False): 
         # region = [CD1, CD2, SP1, SP2]
         self.segment_rule = []
         for rs in self.rule_set_list:
@@ -123,8 +123,8 @@ class Calibrator:
                     ## need to do：print rules
                     ## need to do：show region cal result
                     ## need to do：plot region 
-        if clean_all == True:
-            self.clean_region()
+        
+        self.clean_region()
 
     
 
