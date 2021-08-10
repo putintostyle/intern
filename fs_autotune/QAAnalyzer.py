@@ -411,6 +411,8 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         self.build_regression_data(no_print = True)
         self._apply_w_rule(calibrator=self.calibrator)
         self.withcal.append(self.print_statistics(self.resultsList_with_opt_w, store=True))
+        self.nocal = self.nocal[0]
+        self.withcal = self.withcal[0]
         print('   count  n(>=0)  n(<0)     min     max    mean  2-sigma')
         print('   Before Calibration')
         print( '[Ct] {:3}  {:5}  {:5}   {:6.2f}% {:6.2f}% {:6.2f}% {:6.2f}%'.format(self.nocal[0],self.nocal[1],self.nocal[2],self.nocal[3],self.nocal[4], self.nocal[5], self.nocal[6])) 
