@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from itertools import filterfalse
 import os
 from re import I
 import sys
@@ -84,7 +85,7 @@ class QAAnalyzerBase:
         raise NotImplementedError("QAAnalyzerBase: run function not implemented!")
     
 
-    def print_statistics(self, results, filename="", brief_stat = False):
+    def print_statistics(self, results, filename="", brief_stat = False, store = False):
         """main for run.
 
         :arg1: TODO
@@ -179,7 +180,8 @@ class QAAnalyzerBase:
             #print('  max {:.2f}%'.format(ccdiffs[-1]))
             #print('  mean {:.2f}%'.format(ccmean))
             #print('  2sigma {:.2f}%'.format(2 * math.sqrt(ccdiffAllAbs/len(ccdiffs))))
-    
+        if store:
+            return [len(result), len(Ws), len(Ws3), diffs[0], diffs[-1], mean, 2 * math.sqrt(diffAllAbs/len(Wall))]
     def plot_last_result(self, arg1=None):
         """plot last result.
 
@@ -400,14 +402,21 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         show_plot_result = not self.settings.no_plot_show
         #self.output_wext_fit_result(plot_result, show_plot_result)
         self.logger.info('Analyzer... End')
-    def region_run(self, po_flag = False):
+    def region_run(self):
         # before calibarate, after calibarate
+        # for do_diff
+        self.nocal = []
+        self.withcal = []
 
-        self.build_regression_data(po_flag)
+        self.build_regression_data(no_print = True)
         self.calculate_expected_wext(None) #XXX: need refactor
         self.output_wext_result()
         self.opt_wext = self.estimate_optimized_wext(None)
-        self.apply_calibration_rule()
+        self._apply_w_rule(calibrator=self.calibrator)
+        self.withcal.append(self.print_statistics(self.resultsList_with_opt_w, store=True))
+        print(self.nocal)
+        print('-'*20)
+        print(self.withcal)
 
     def cost(self, result):
         """cost function.
@@ -420,8 +429,7 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         spec = 2.0*self.settings.cost_adjust
         return (result[2]/spec)**2 # normalize spec to 1
 
-
-    def build_regression_data(self, arg1, print_origin = True):
+    def build_regression_data(self, arg1, no_print = False):
         """build regression data for wext calculation and fitting
 
         :arg1: TODO
@@ -449,9 +457,9 @@ class QAWidthAnalyzer(QAAnalyzerBase):
             #self.job_runner.set_cases(self.cases)
             self.job_runner.settings.manual_tuning_param['wext'] = param
             params = self.job_runner.tuningParam2tup()
-           
-            print('-'*80)
-            print("itr %s, wext = %s" % (itr, self.job_runner.settings.manual_tuning_param['wext']))
+            if no_print == False:
+                print('-'*80)
+                print("itr %s, wext = %s" % (itr, self.job_runner.settings.manual_tuning_param['wext']))
             f_log.write("itr %s, wext = %s\n" % (itr, self.job_runner.settings.manual_tuning_param['wext']))
             
             cases = []
@@ -470,10 +478,11 @@ class QAWidthAnalyzer(QAAnalyzerBase):
 
             #show all layer statistics
             #print(result_list)
-            if (print_origin) & (itr == 0): # print only without cal
-                self.print_statistics(result_list) #print on screen
-            else:
+            if no_print == False:
                 self.print_statistics(result_list)
+            else:
+                if itr == 0:
+                    self.nocal.append(self.print_statistics(result_list, store = True))
             self.logger.info('Analyzer... End')
             
             
@@ -625,7 +634,7 @@ class QAWidthAnalyzer(QAAnalyzerBase):
             self.resultsList_with_opt_w.append((new_diff, -100, CD, SP))
             self.last_results = self.resultsList_with_opt_w
 
-    def apply_calibration_rule(self, brief_stat = False):
+    def apply_calibration_rule(self, brief_stat = filterfalse):
         self._apply_w_rule(calibrator=self.calibrator)
         print('-'*80)
         print("Applying calibration w rule (prediction)")
@@ -635,7 +644,6 @@ class QAWidthAnalyzer(QAAnalyzerBase):
             print('false')
         else:
             self.print_statistics(self.resultsList_with_opt_w)
-        self.last_results = self.resultsList_with_opt_w
 
     def apply_w_rule(self, opt_wext):
         self._apply_w_rule(opt_wext)
