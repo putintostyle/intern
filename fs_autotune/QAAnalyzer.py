@@ -180,8 +180,7 @@ class QAAnalyzerBase:
             #print('  max {:.2f}%'.format(ccdiffs[-1]))
             #print('  mean {:.2f}%'.format(ccmean))
             #print('  2sigma {:.2f}%'.format(2 * math.sqrt(ccdiffAllAbs/len(ccdiffs))))
-        if store:
-            return [len(result), len(Ws), len(Ws3), diffs[0], diffs[-1], mean, 2 * math.sqrt(diffAllAbs/len(Wall))]
+        
     def plot_last_result(self, arg1=None):
         """plot last result.
 
@@ -405,24 +404,26 @@ class QAWidthAnalyzer(QAAnalyzerBase):
     def region_run(self):
         # before calibarate, after calibarate
         # for do_diff
-        self.nocal = []
-        self.withcal = []
-
+        # self.nocal = []
+        # self.withcal = []
+        print('Before Calibration')
         self.build_regression_data(no_print = True)
         self._apply_w_rule(calibrator=self.calibrator)
-        self.withcal.append(self.print_statistics(self.resultsList_with_opt_w, store=True))
-        self.nocal = self.nocal[0]
-        self.withcal = self.withcal[0]
-        print('   count  n(>=0)  n(<0)     min     max    mean  2-sigma')
-        print('-'*20)
-        print('|Before Calibration|')
-        print('-'*20)
-        print( '[Ct] {:3}  {:5}  {:5}   {:6.2f}% {:6.2f}% {:6.2f}% {:6.2f}%'.format(self.nocal[0],self.nocal[1],self.nocal[2],self.nocal[3],self.nocal[4], self.nocal[5], self.nocal[6])) 
+        self.print_statistics(self.resultsList_with_opt_w)
         print('-'*80)
-        print('-'*20)
-        print('    After Calibration')
-        print('-'*20)
-        print( '[Ct] {:3}  {:5}  {:5}   {:6.2f}% {:6.2f}% {:6.2f}% {:6.2f}%'.format(self.withcal[0],self.withcal[1],self.withcal[2],self.withcal[3],self.withcal[4], self.withcal[5], self.withcal[6]))
+        print('After Calibration')
+        # self.nocal = self.nocal[0]
+        # self.withcal = self.withcal[0]
+        # print('   count  n(>=0)  n(<0)     min     max    mean  2-sigma')
+        
+        # print('Before Calibration')
+        # print('-'*20)
+        # print( '[Ct] {:3}  {:5}  {:5}   {:6.2f}% {:6.2f}% {:6.2f}% {:6.2f}%'.format(self.nocal[0],self.nocal[1],self.nocal[2],self.nocal[3],self.nocal[4], self.nocal[5], self.nocal[6])) 
+        # print('-'*80)
+        
+        # print('After Calibration')
+        
+        # print( '[Ct] {:3}  {:5}  {:5}   {:6.2f}% {:6.2f}% {:6.2f}% {:6.2f}%'.format(self.withcal[0],self.withcal[1],self.withcal[2],self.withcal[3],self.withcal[4], self.withcal[5], self.withcal[6]))
         
     def cost(self, result):
         """cost function.
@@ -488,7 +489,7 @@ class QAWidthAnalyzer(QAAnalyzerBase):
                 self.print_statistics(result_list)
             else:
                 if itr == 0:
-                    self.nocal.append(self.print_statistics(result_list, store = True))
+                    self.print_statistics(result_list)
             self.logger.info('Analyzer... End')
             
             
