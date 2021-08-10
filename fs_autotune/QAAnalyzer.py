@@ -409,9 +409,9 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         self.withcal = []
 
         self.build_regression_data(no_print = True)
-        self.calculate_expected_wext(None) #XXX: need refactor
-        self.output_wext_result()
-        self.opt_wext = self.estimate_optimized_wext(None)
+        # self.calculate_expected_wext(None) #XXX: need refactor
+        # self.output_wext_result()
+        # self.opt_wext = self.estimate_optimized_wext(None)
         self._apply_w_rule(calibrator=self.calibrator)
         self.withcal.append(self.print_statistics(self.resultsList_with_opt_w, store=True))
         print(self.nocal)
