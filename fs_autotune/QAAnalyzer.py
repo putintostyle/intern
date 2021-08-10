@@ -408,10 +408,17 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         # self.withcal = []
         print('Before Calibration')
         self.build_regression_data(no_print = True)
-        self._apply_w_rule(calibrator=self.calibrator)
-        self.print_statistics(self.resultsList_with_opt_w)
+        
+        self.calculate_expected_wext(None) #XXX: need refactor
+        self.output_wext_result()
+        self.opt_wext = self.estimate_optimized_wext(None)
+        print("Optimized wext: %s" % self.opt_wext)
+        
         print('-'*80)
         print('After Calibration')
+        self._apply_w_rule(calibrator=self.calibrator)
+        self.print_statistics(self.resultsList_with_opt_w)
+        
         # self.nocal = self.nocal[0]
         # self.withcal = self.withcal[0]
         # print('   count  n(>=0)  n(<0)     min     max    mean  2-sigma')
