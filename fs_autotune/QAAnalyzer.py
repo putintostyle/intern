@@ -401,6 +401,7 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         show_plot_result = not self.settings.no_plot_show
         #self.output_wext_fit_result(plot_result, show_plot_result)
         self.logger.info('Analyzer... End')
+        
     def region_run(self):
         # before calibarate, after calibarate
         # for do_diff

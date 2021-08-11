@@ -120,6 +120,7 @@ class Calibrator:
                         continue
                 else:
                     continue
+                
                     ## need to do：print rules
                     ## need to do：show region cal result
                     ## need to do：plot region 
