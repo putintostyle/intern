@@ -276,11 +276,21 @@ class QAAnalyzerShell(QAShellBase):
         self.qa_analyzer.calibrator.clean_region()
     ## To do
     def do_diff (self, region): # show statistical info and plot the difference
+        
         pass
     ## def do_selregion () ginput to draw the region to cal
 
 
-    # def do_    
+    def do_regionsel(self, args):
+        ## usage:regionsel -o [origin] -l [last cal] -autocal [do_range] -read [read select region]  
+        ## show origin
+        # return region
+        # show statistic
+        cmds =  args.split()
+        if '-o' in cmds:
+            self.qa_analyzer.plot(init = True, init_s = False, select = False)
+        
+        pass    
     do_g = do_global
     do_r = do_range
     do_p = do_plot

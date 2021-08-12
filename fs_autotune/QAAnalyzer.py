@@ -13,7 +13,7 @@ import traceback
 #import shutil
 #import re
 import math
-
+from regionselector import *
 import numpy as np
 import matplotlib.pyplot as plt 
 import matplotlib.cm as cm
@@ -307,6 +307,35 @@ class QAAnalyzerBase:
         if show_plot:
             plt.show()
 
+    def plot_region(self, result, ref = None, region = None, show = False, select = False):
+        # region = [CD1, CD2], [SP1, SP2]
+        cal = [list(i) for i in result]
+        cal = np.array(cal)
+        cal_CD = cal[:,2]
+        cal_SP = cal[:,3]
+        cal_diffscale = cal[:,0]**2
+        if ref != None:
+            reference = [list(i) for i in ref]
+            reference = np.array(reference)
+            ref_CD = reference[:,2]
+            ref_SP = reference[:,3]
+            ref_diffscale = reference[:,0]**2
+
+            ax1 = plt.subplot(121)
+            ax1.scatter(ref_CD, ref_SP, s = ref_diffscale, cmap=cm.plasma_r, alpha=0.3)
+            rect1 = ax1.Rectancle((min(region[0]), min(region[1])), abs(region[0][0]-region[0][1]), abs(region[1][0]-region[1][1]), fill = False, edgecolor = 'r', linewidth = 1)
+            ax1.add_patch(rect1)
+            ax2 = plt.subplot(122)
+            ax2.scatter(cal_CD, cal_SP, s = cal_diffscale, cmap=cm.plasma_r, alpha=0.3)
+            ax2.add_patch(rect1)
+        else:
+            ax, fig = plt.subplot()
+            ax.scatter(cal_CD, cal_SP, s = cal_diffscale, cmap=cm.plasma_r, alpha=0.3)
+            if select:
+                return ax, fig
+        if show:
+            plt.show()
+       
 
 class QASingleRunAnalyzer(QAAnalyzerBase):
 
@@ -356,7 +385,8 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         self.resultsList = [] #only for output
         self.resultsList_with_opt_w = [] #for estimating final results
         self.last_results = None
-        
+        self.init = None # result that without cal
+
         #XXX: need to update
         self.diffs = None
         self.dct_dw_s = None
@@ -401,7 +431,7 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         show_plot_result = not self.settings.no_plot_show
         #self.output_wext_fit_result(plot_result, show_plot_result)
         self.logger.info('Analyzer... End')
-        
+
     def region_run(self):
         # before calibarate, after calibarate
         # for do_diff
@@ -500,6 +530,9 @@ class QAWidthAnalyzer(QAAnalyzerBase):
                     self.print_statistics(result_list)
             self.logger.info('Analyzer... End')
             
+            if self.init == None:
+                if itr == 0:
+                    self.init = result_list
             
             # get result
             # check converge
@@ -747,8 +780,21 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         print('Expected wext mean/2sigma: {:6.2f} {:6.2f}'.format( tcmean, 2 * math.sqrt( tcerrsq/N ) ), file = fh)
         print('-'*100, file = fh)
 
-        
-    
+    def plot(self, init = False, init_s = False, select = False):
+        if init:
+            if init_s:
+                self.plot_region(self.init, show=True)
+            else:
+                self.plot_region(self.init)
+
+        elif select:
+            current = self.last_results
+            ax, fig = self.plot_region(current, select=True)
+            wm = window_motion(fig, ax)
+            wm.connect()
+            plt.show()
+            
+            region = wm.region   
 
     def output_wext_fit_result(self, plot_result = True, show_plot = True, plot_path = "QA_result_wext_fit.png"):
         """output wext fit result.
