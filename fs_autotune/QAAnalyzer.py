@@ -799,8 +799,13 @@ class QAWidthAnalyzer(QAAnalyzerBase):
             self.print_statistics(sel_region)
         elif select:        
             if init:
-                pass
-
+                ax, fig = self.plot_region(self.init, select=True)
+            else:
+                ax, fig = self.plot_region(self.init, select=True)
+            wm = window_motion(fig, ax)
+            wm.connect()
+            plt.show()
+            return wm.region
 
 
     def output_wext_fit_result(self, plot_result = True, show_plot = True, plot_path = "QA_result_wext_fit.png"):
