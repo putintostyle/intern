@@ -781,30 +781,29 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         print('-'*100, file = fh)
     
 
-    def plot(self, init = False, init_s = False, select = False, read = False):
+    def plot(self, init = False, select = False, read = False):
+        
+        
+        if init: # read the stat in initial select
+            ax, fig = self.plot_region(self.init, select=True)
+        else:
+            ax, fig = self.plot_region(self.last_results, select=True) 
+        wm = window_motion(fig, ax)
+        wm.connect()
+        plt.show()
         
         if read:
-            if init: # read the stat in initial select
-                ax, fig = self.plot_region(self.init, select=True)
-            else:
-                ax, fig = self.plot_region(self.last_results, select=True) 
-            wm = window_motion(fig, ax)
-            wm.connect()
-            plt.show()
             sel_region = []
-                
-            for pts in self.init:
-                if (list(pts)[2] >= wm.region[0][0]) & (list(pts)[2] <= wm.region[0][1]) & (list(pts)[3] >= wm.region[1][0]) & (list(pts)[3] <= wm.region[1][1]):
-                    sel_region.append(pts)
+            if init:
+                for pts in self.init:
+                    if (list(pts)[2] >= wm.region[0][0]) & (list(pts)[2] <= wm.region[0][1]) & (list(pts)[3] >= wm.region[1][0]) & (list(pts)[3] <= wm.region[1][1]):
+                        sel_region.append(pts)
+            else:
+                for pts in self.last_results:
+                    if (list(pts)[2] >= wm.region[0][0]) & (list(pts)[2] <= wm.region[0][1]) & (list(pts)[3] >= wm.region[1][0]) & (list(pts)[3] <= wm.region[1][1]):
+                        sel_region.append(pts)
             self.print_statistics(sel_region)
         elif select:        
-            if init:
-                ax, fig = self.plot_region(self.init, select=True)
-            else:
-                ax, fig = self.plot_region(self.init, select=True)
-            wm = window_motion(fig, ax)
-            wm.connect()
-            plt.show()
             return wm.region
 
 

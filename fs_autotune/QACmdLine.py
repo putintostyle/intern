@@ -2,6 +2,8 @@
 import cmd
 import string, sys
 import csv
+
+from numpy.lib.function_base import select
 # from typing import runtime_checkable
 from QAAnalyzer import *
 from QACalibration import Calibrator
@@ -282,15 +284,25 @@ class QAAnalyzerShell(QAShellBase):
 
 
     def do_regionsel(self, args):
-        ## usage:regionsel -o [origin] -l [last cal] -autocal [do_range] -read [read select region]  
+        ## usage:regionsel -os [select from origin] -or [select read stat from origin ] -ls [select form last cal]-lr [select read stat from last cal read]  
         ## show origin
         # return region
         # show statistic
         cmds =  args.split()
-        if '-o' in cmds:
-            self.qa_analyzer.plot(init = True, init_s = False, select = False)
+        if len(cmd) > 1:
+            print('too  many args')
+        os_flag = '-os' in cmds
+        or_flag = '-or' in cmds
+        ls_flag = '-ls' in cmds
+        lr_flag = '-lr' in cmds
+        if os_flag | ls_flag:
+            select_region = self.qa_analyzer.plot(init = (os_flag|or_flag) , select = True, read = False)
+        else:
+            self.qa_analyzer.plot(init = (os_flag|or_flag) , select = False, read = True)
         
-        pass    
+        print('closed selector')
+
+         
     do_g = do_global
     do_r = do_range
     do_p = do_plot
