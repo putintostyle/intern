@@ -779,22 +779,29 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         print('-'*100, file = fh)
         print('Expected wext mean/2sigma: {:6.2f} {:6.2f}'.format( tcmean, 2 * math.sqrt( tcerrsq/N ) ), file = fh)
         print('-'*100, file = fh)
+    
 
-    def plot(self, init = False, init_s = False, select = False):
-        if init:
-            if init_s:
-                self.plot_region(self.init, show=True)
+    def plot(self, init = False, init_s = False, select = False, read = False):
+        
+        if read:
+            if init: # read the stat in initial select
+                ax, fig = self.plot_region(self.init, select=True)
             else:
-                self.plot_region(self.init)
-
-        elif select:
-            current = self.last_results
-            ax, fig = self.plot_region(current, select=True)
+                ax, fig = self.plot_region(self.last_results, select=True) 
             wm = window_motion(fig, ax)
             wm.connect()
             plt.show()
-            
-            region = wm.region   
+            sel_region = []
+                
+            for pts in self.init:
+                if (list(pts)[2] >= wm.region[0][0]) & (list(pts)[2] <= wm.region[0][1]) & (list(pts)[3] >= wm.region[1][0]) & (list(pts)[3] <= wm.region[1][1]):
+                    sel_region.append(pts)
+            self.print_statistics(sel_region)
+        elif select:        
+            if init:
+                pass
+
+
 
     def output_wext_fit_result(self, plot_result = True, show_plot = True, plot_path = "QA_result_wext_fit.png"):
         """output wext fit result.
