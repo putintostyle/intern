@@ -46,11 +46,12 @@ class window_motion:
         self.pressed = False
         #plot
         # pass
+        print(self.region)
         self.region = []
         self.region.append([self.xcoor, self.ycoor])
         self.region.append([event.xdata, event.ydata])
         self.drawrect(event)
-        tellme('region {:.2f} <= x <={:.2f}, {:.2f} <= y <= {:.2f}\n double click to confrim'.format(self.xcoor, event.xdata, self.ycoor, event.ydata))
+        tellme('region {:.2f} <= x <={:.2f}, {:.2f} <= y <= {:.2f}\n double click to confrim'.format(self.xcoor, event.xdata, event.ydata, self.ycoor))
         
 
     def show(self):
