@@ -321,15 +321,15 @@ class QAAnalyzerBase:
             ref_SP = reference[:,3]
             ref_diffscale = reference[:,0]**2
 
-            ax1 = plt.subplot(121)
+            ax1 = plt.subplots(121)
             ax1.scatter(ref_CD, ref_SP, s = ref_diffscale, cmap=cm.plasma_r, alpha=0.3)
             rect1 = ax1.Rectancle((min(region[0]), min(region[1])), abs(region[0][0]-region[0][1]), abs(region[1][0]-region[1][1]), fill = False, edgecolor = 'r', linewidth = 1)
             ax1.add_patch(rect1)
-            ax2 = plt.subplot(122)
+            ax2 = plt.subplots(122)
             ax2.scatter(cal_CD, cal_SP, s = cal_diffscale, cmap=cm.plasma_r, alpha=0.3)
             ax2.add_patch(rect1)
         else:
-            ax, fig = plt.subplot()
+            ax, fig = plt.subplots()
             ax.scatter(cal_CD, cal_SP, s = cal_diffscale, cmap=cm.plasma_r, alpha=0.3)
             if select:
                 return ax, fig
