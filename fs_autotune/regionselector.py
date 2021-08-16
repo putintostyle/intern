@@ -48,7 +48,7 @@ class window_motion:
         #plot
         # pass
         
-        self.region = []
+        # self.region = []
         self.region.append([[self.xcoor, self.ycoor], [event.xdata, event.ydata]])
         
         self.drawrect(event)
