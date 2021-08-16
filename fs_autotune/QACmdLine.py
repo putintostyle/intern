@@ -289,7 +289,7 @@ class QAAnalyzerShell(QAShellBase):
         # return region
         # show statistic
         cmds =  args.split()
-        if len(cmd) > 1:
+        if len(cmds) > 1:
             print('too  many args')
         os_flag = '-os' in cmds
         or_flag = '-or' in cmds
