@@ -34,10 +34,7 @@ class window_motion:
         self.xcoor = event.xdata
         self.ycoor = event.ydata
         
-        if (not self.double) & (self.left):
-            self.region = []
-            self.region.append([self.xcoor, self.ycoor])
-        elif self.double:
+        if self.double:
             self.region.pop()
             plt.close()
             print(self.region)
@@ -49,6 +46,8 @@ class window_motion:
         self.pressed = False
         #plot
         # pass
+        self.region = []
+        self.region.append([self.xcoor, self.ycoor])
         self.region.append([event.xdata, event.ydata])
         self.drawrect(event)
         tellme('region {:.2f} <= x <={:.2f}, {:.2f} <= y <= {:.2f}\n double click to confrim'.format(self.xcoor, event.xdata, self.ycoor, event.ydata))
