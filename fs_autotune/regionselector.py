@@ -38,6 +38,7 @@ class window_motion:
             self.region = []
             self.region.append([self.xcoor, self.ycoor])
         elif self.double:
+            self.region.pop()
             plt.close()
             print(self.region)
         
