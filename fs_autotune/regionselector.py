@@ -24,6 +24,7 @@ class window_motion:
         self.region = []
         self.rect = Rectangle((0,0), 0, 0, fill=False, ec='r')
         self.ax.add_patch(self.rect)
+        self.previous_motion = None
     def onclick(self, event):
         self.pressed = True
         self.double = event.dblclick
@@ -36,13 +37,13 @@ class window_motion:
         
         
         if self.double:
-            self.region.pop()
+            self.region = self.region[-2]
             plt.close()
             print(self.region)
         
         self.left = None
         self.right = None
-
+        
     def onrelease(self, event):
         self.pressed = False
         #plot
