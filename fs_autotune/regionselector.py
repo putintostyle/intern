@@ -50,10 +50,10 @@ class window_motion:
         # pass
         
         # self.region = []
-        self.region.append([[self.xcoor, self.ycoor], [event.xdata, event.ydata]])
+        self.region.append([[min(self.xcoor, event.xdata), min(self.ycoor, event.ydata)], [max(self.xcoor, event.xdata), max(self.ycoor, event.ydata)]])
         
         self.drawrect(event)
-        tellme('region {:.2f} <= x <={:.2f}, {:.2f} <= y <= {:.2f}\n double click to confrim'.format(self.xcoor, event.xdata, event.ydata, self.ycoor))
+        tellme('region {:.2f} <= x <={:.2f}, {:.2f} <= y <= {:.2f}\n double click to confrim'.format(min(self.xcoor, event.xdata), max(self.xcoor, event.xdata), min(self.ycoor, event.ydata), max(self.ycoor, event.ydata)))
         
 
     def show(self):
