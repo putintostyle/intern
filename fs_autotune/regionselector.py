@@ -35,7 +35,7 @@ class window_motion:
         self.ycoor = event.ydata
         
         if self.double:
-            self.region.pop()
+            
             plt.close()
             print(self.region)
         
