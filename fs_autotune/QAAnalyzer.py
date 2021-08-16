@@ -796,11 +796,11 @@ class QAWidthAnalyzer(QAAnalyzerBase):
             sel_region = []
             if init:
                 for pts in self.init:
-                    if (list(pts)[2] >= wm.region[0][0]) & (list(pts)[2] <= wm.region[0][1]) & (list(pts)[3] >= wm.region[1][0]) & (list(pts)[3] <= wm.region[1][1]):
+                    if (list(pts)[2] >= wm.region[0][0]) & (list(pts)[2] <= wm.region[1][0]) & (list(pts)[3] >= wm.region[0][1]) & (list(pts)[3] <= wm.region[1][1]):
                         sel_region.append(pts)
             else:
                 for pts in self.last_results:
-                    if (list(pts)[2] >= wm.region[0][0]) & (list(pts)[2] <= wm.region[0][1]) & (list(pts)[3] >= wm.region[1][0]) & (list(pts)[3] <= wm.region[1][1]):
+                    if (list(pts)[2] >= wm.region[0][0]) & (list(pts)[2] <= wm.region[1][0]) & (list(pts)[3] >= wm.region[0][1]) & (list(pts)[3] <= wm.region[1][1]):
                         sel_region.append(pts)
             self.print_statistics(sel_region)
         elif select:        
