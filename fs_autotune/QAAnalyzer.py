@@ -329,7 +329,7 @@ class QAAnalyzerBase:
             ax2.scatter(cal_CD, cal_SP, s = cal_diffscale, cmap=cm.plasma_r, alpha=0.3)
             ax2.add_patch(rect1)
         else:
-            ax, fig = plt.subplots()
+            fig, ax  = plt.subplots()
             ax.scatter(cal_CD, cal_SP, s = cal_diffscale, cmap=cm.plasma_r, alpha=0.3)
             if select:
                 return ax, fig
