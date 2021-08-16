@@ -313,7 +313,7 @@ class QAAnalyzerBase:
         cal = np.array(cal)
         cal_CD = cal[:,2]
         cal_SP = cal[:,3]
-        cal_diffscale = cal[:,0]**2
+        cal_diffscale = np.abs(cal[:,0])
         if ref != None:
             reference = [list(i) for i in ref]
             reference = np.array(reference)
