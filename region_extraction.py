@@ -48,7 +48,7 @@ SP = data[logi_pool][:,5]
 
 train_X = np.array([[CD[i], SP[i]] for i in range(0, len(CD), 2)])
 #(Ct_err1*wext2 - Ct_err2*wext1)/(Ct_err1 - Ct_err2)
-train_Y = np.array([(-Ct_err[i]*parameter[i+1][0]+Ct_err[i+1]*parameter[i][0])/(Ct_err[i]-Ct_err[i+1]) for i in range(0, len(Ct_err), 2)])
+train_Y = np.array([(Ct_err[i]*parameter[i+1][0]-Ct_err[i+1]*parameter[i][0])/(Ct_err[i]-Ct_err[i+1]) for i in range(0, len(Ct_err), 2)])
 
 regressor = DecisionTreeRegressor(random_state=0, min_samples_leaf = parameters.tree_number)
 regressor.fit(train_X, train_Y)
