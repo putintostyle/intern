@@ -342,9 +342,10 @@ class QAAnalyzerBase:
 class QASingleRunAnalyzer(QAAnalyzerBase):
 
     """For run job 1 time"""
-
+        
     def __init__(self, settings, runner):
         super().__init__(settings, runner)
+    
 
     def run(self, arg1 = None):
         """main for run.
@@ -535,6 +536,7 @@ class QAWidthAnalyzer(QAAnalyzerBase):
             if self.init == None:
                 if itr == 0:
                     self.init = result_list
+                    
             
             # get result
             # check converge
@@ -562,7 +564,10 @@ class QAWidthAnalyzer(QAAnalyzerBase):
 
         print('-'*80)
         f_log.close()
-
+    def save_init(self):
+        cal = [list(i) for i in self.init]
+        cal = np.array(cal)
+        pd.DataFrame.to_csv(pd.DataFrame(cal), 'layer_result.csv')
     def calculate_expected_wext(self, arg1):
         """calculate expected wext.
 

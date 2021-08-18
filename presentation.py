@@ -12,7 +12,7 @@ Cc_err = data[logi_pool][:,3]
 CD = data[logi_pool][:,4]   
 SP = data[logi_pool][:,5]
 train_X = np.array([[CD[i], SP[i]] for i in range(0, len(CD), 2)])
-train_Y = np.array([(-Ct_err[i]*parameter[i+1][0]+Ct_err[i+1]*parameter[i][0])/(Ct_err[i]-Ct_err[i+1]) for i in range(0, len(Ct_err), 2)])
+train_Y = np.array([(Ct_err[i]*parameter[i+1][0]-Ct_err[i+1]*parameter[i][0])/(Ct_err[i]-Ct_err[i+1]) for i in range(0, len(Ct_err), 2)])
 
 # fig = plt.figure()
 # ax = fig.gca(projection='3d')
@@ -24,7 +24,7 @@ train_Y = np.array([(-Ct_err[i]*parameter[i+1][0]+Ct_err[i+1]*parameter[i][0])/(
 # plt.show()
 plt.clf()
 fig, ax = plt.subplots()
-ax.scatter(train_X[:,0], train_X[:,1], s = abs(train_Y)*100, c = 1*np.sign(train_Y), cmap = plt.cm.plasma_r, alpha=0.3)
+ax.scatter(train_X[:,0], train_X[:,1],  c = np.sign(train_Y.flatten), cmap = plt.cm.plasma_r, alpha=0.3)
 ax.set_xlabel('width')
 ax.set_ylabel('Spacing')
 plt.legend()
