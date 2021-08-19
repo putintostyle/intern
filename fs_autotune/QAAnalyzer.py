@@ -342,10 +342,9 @@ class QAAnalyzerBase:
 class QASingleRunAnalyzer(QAAnalyzerBase):
 
     """For run job 1 time"""
-        
+
     def __init__(self, settings, runner):
         super().__init__(settings, runner)
-    
 
     def run(self, arg1 = None):
         """main for run.
@@ -536,8 +535,6 @@ class QAWidthAnalyzer(QAAnalyzerBase):
             if self.init == None:
                 if itr == 0:
                     self.init = result_list
-                    
-            
             # get result
             # check converge
 
@@ -564,10 +561,6 @@ class QAWidthAnalyzer(QAAnalyzerBase):
 
         print('-'*80)
         f_log.close()
-    def save_init(self):
-        cal = [list(i) for i in self.init]
-        cal = np.array(cal)
-        pd.DataFrame.to_csv(pd.DataFrame(cal), 'layer_result.csv')
     def calculate_expected_wext(self, arg1):
         """calculate expected wext.
 
@@ -810,6 +803,16 @@ class QAWidthAnalyzer(QAAnalyzerBase):
                     if (list(pts)[2] >= wm.region[0][0]) & (list(pts)[2] <= wm.region[1][0]) & (list(pts)[3] >= wm.region[0][1]) & (list(pts)[3] <= wm.region[1][1]):
                         sel_region.append(pts)
             self.print_statistics(sel_region)
+            self.settings.CDSP_range_param['CD1'] = wm.region[0][0]
+            self.settings.CDSP_range_param['CD2'] = wm.region[1][0]
+            self.settings.CDSP_range_param['SP1'] = wm.region[0][1]
+            self.settings.CDSP_range_param['SP2'] = wm.region[1][1]
+            self.settings.CDSP_range_param['wext'] = None
+            # self.build_regression_data(None)
+            # self.calculate_expected_wext(None) #XXX: need refactor
+            self.estimate_optimized_wext(None)
+
+            
         elif select:        
             return wm.region
 

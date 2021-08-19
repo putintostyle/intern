@@ -206,8 +206,6 @@ class QAAnalyzerShell(QAShellBase):
                 print("require file name")
             elif ('.csv' not in cmds[0]):
                 print("require csv file")
-    def do_save(self, args):
-        self.qa_analyzer.save_init()
     def do_autotune(self, args):
         # usage: -f file_name(auto), -t tree_number 
         cmds = args.split()

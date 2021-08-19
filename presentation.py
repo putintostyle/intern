@@ -24,7 +24,7 @@ train_Y = np.array([(Ct_err[i]*parameter[i+1][0]-Ct_err[i+1]*parameter[i][0])/(C
 # plt.show()
 plt.clf()
 fig, ax = plt.subplots()
-ax.scatter(train_X[:,0], train_X[:,1],  c = np.sign(train_Y.flatten), cmap = plt.cm.plasma_r, alpha=0.3)
+ax.scatter(train_X[:,0], train_X[:,1], s = abs(train_Y)*20, c = np.sign(train_Y), cmap = plt.cm.plasma_r, alpha=0.5)
 ax.set_xlabel('width')
 ax.set_ylabel('Spacing')
 plt.legend()
