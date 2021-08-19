@@ -44,35 +44,54 @@ regressor.fit(train_X, train_Y)
 # plt.legend()
 # plt.show()
 
-# X = np.linspace(0, 1, 100)
-# Y = []
-# for i in X:
-#     if i < 0.3:
-#         Y.append(2+random.randint(-10, 10)/100)
-#     elif i<0.6:
-#         Y.append(0+random.randint(-10, 10)/100)
-#     else:
-#         Y.append(1+random.randint(-10, 10)/100)
-# # plt.scatter(X, Y)
+X = np.linspace(0, 1, 100)
+Y = []
+for i in X:
+    if i < 0.3:
+        Y.append(2+random.randint(-10, 10)/100)
+    elif i<0.6:
+        Y.append(0+random.randint(-10, 10)/100)
+    else:
+        Y.append(1+random.randint(-10, 10)/100)
+plt.scatter(X, Y)
+plt.savefig('data.png')
+mse = []
+
+for i in range(0,len(Y)):
+    tmp_1 = np.sum((np.mean(np.array(Y)[i:])-np.array(Y)[i:])**2)/len(np.array(Y)[i:])
+
+    tmp_2 = np.sum((np.mean(np.array(Y)[:i])-np.array(Y)[:i])**2)/len(np.array(Y)[:i])
+    if abs(tmp_1 - tmp_2)< 0.001:
+        mean = [np.mean(np.array(Y)[i:]), np.mean(np.array(Y)[:i]) ]
+        print(mean)
+    mse.append([tmp_1, tmp_2])
+mse = np.array(mse)
+
+plt.xlabel('data')
+plt.ylabel('Mean square error')
+plt.plot(X, mse[:,0], 'r', label = 'region 1')
+plt.plot(X, mse[:,1], 'b', label = 'region 2')
+plt.legend()
+plt.savefig('data with mse.png')
+
+# x_min, x_max = train_X[:, 0].min() - 1, train_X[:, 0].max() + 1
+# y_min, y_max = train_X[:, 1].min() - 1, train_X[:, 1].max() + 1
+
+# xx, yy = np.meshgrid(np.linspace(100, 650, 1000),
+                    #  np.linspace(100, 650, 1000))
+
+# Z = regressor.predict(np.c_[xx.ravel(), yy.ravel()])
+# Z = Z.reshape(xx.shape)
+# cs = plt.contourf(xx, yy, Z, cmap=plt.cm.PRGn, levels = 20)
+# plt.colorbar()
+
 # # plt.show()
-# mse = []
-# for i in range(0,len(Y)):
-#     mse.append(np.sum((np.mean(np.array(Y)[:i])-np.array(Y)[:i])**2)/len(np.array(Y)[:i]))
-# plt.xlabel('data')
-# plt.ylabel('Mean square error')
-# plt.plot(X, mse)
+# from scipy.interpolate import LinearNDInterpolator
+# interp = LinearNDInterpolator(train_X, train_Y, fill_value=0)
+# Z = interp(xx, yy)
+# plt.contourf(xx, yy, Z, cmap=plt.cm.PRGn, levels = 20)
+# plt.colorbar()
+# plt.scatter(train_X[:,0], train_X[:,1], s = abs(train_Y)*10, c = np.sign(train_Y), cmap = 'plasma', alpha=0.5)
+# plt.xlabel('Width')
+# plt.ylabel('Spacing')
 # plt.show()
-
-x_min, x_max = train_X[:, 0].min() - 1, train_X[:, 0].max() + 1
-y_min, y_max = train_X[:, 1].min() - 1, train_X[:, 1].max() + 1
-
-xx, yy = np.meshgrid(np.linspace(100, 650, 1000),
-                     np.linspace(100, 650, 1000))
-
-Z = regressor.predict(np.c_[xx.ravel(), yy.ravel()])
-Z = Z.reshape(xx.shape)
-cs = plt.contourf(xx, yy, Z, cmap=plt.cm.PRGn, levels = 20)
-plt.colorbar()
-plt.scatter(train_X[:,0], train_X[:,1], s = abs(train_Y)*10, c = np.sign(train_Y), cmap = 'plasma', alpha=0.5)
-
-plt.show()
