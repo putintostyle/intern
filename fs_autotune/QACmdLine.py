@@ -225,13 +225,13 @@ class QAAnalyzerShell(QAShellBase):
                         tree_number = cmds[cmds.index('-t')+1]
                         cmdstring = 'region_extraction.py -l {} -r {} --case_file_name -tn {} -wd{}'
                         if '-ms' in cmds:
-                            os.system( (cmdstring+'-m -c {}').format(layer, sram, tree_number, os.path.abspath(os.getcwd()), self.select))
+                            os.system( (cmdstring+'-m -c {} {} {} {}').format(layer, sram, tree_number, os.path.abspath(os.getcwd()), self.select[0], self.select[1], self.select[2], self.select[3]))
                         else:
                             os.system( (cmdstring).format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
                     else:
                         cmdstring = 'region_extraction.py -l {} -r {} --case_file_name -wd{}'
                         if '-ms' in cmds:
-                            os.system( (cmdstring+' -m -c {}').format(layer, sram, os.path.abspath(os.getcwd()), self.select))
+                            os.system( (cmdstring+' -m -c {} {} {} {}').format(layer, sram, os.path.abspath(os.getcwd()), self.select[0], self.select[1], self.select[2], self.select[3]))
                         else:
                             os.system( (cmdstring).format(layer, sram, os.path.abspath(os.getcwd())))
 
@@ -241,13 +241,13 @@ class QAAnalyzerShell(QAShellBase):
                         tree_number = cmds[cmds.index('-t')+1]
                         cmdstring = 'region_extraction.py -l {} -r {} --manul_file_name {} -tn {} -wd{}'
                         if '-ms' in cmds:
-                            os.system( (cmdstring+'-m -c {}').format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd()), self.select))
+                            os.system( (cmdstring+'-m -c {} {} {} {}').format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd()), self.select[0], self.select[1], self.select[2], self.select[3]))
                         else:
                             os.system( cmdstring.format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd())))
                     else:
                         cmdstring = 'region_extraction.py -l {} -r {} --manul_file_name {} -wd{}'
                         if '-ms' in cmds:
-                            os.system( (cmdstring+'-m -c {}').format(layer, sram, file_operation, os.path.abspath(os.getcwd()), self.select))
+                            os.system( (cmdstring+'-m -c {} {} {} {}').format(layer, sram, file_operation, os.path.abspath(os.getcwd()), self.select[0], self.select[1], self.select[2], self.select[3]))
                         else:
                             os.system(cmdstring.format(layer, sram, file_operation, os.path.abspath(os.getcwd())))
             else:
@@ -255,13 +255,13 @@ class QAAnalyzerShell(QAShellBase):
                     tree_number = cmds[cmds.index('-t')+1]
                     cmdstring = 'region_extraction.py -l {} -r {} -tn {} -wd {}'
                     if '-ms' in cmds:
-                        os.system( (cmdstring+'-m -c {}').format(layer, sram, tree_number, os.path.abspath(os.getcwd()), self.select))
+                        os.system( (cmdstring+'-m -c {} {} {} {}').format(layer, sram, tree_number, os.path.abspath(os.getcwd()), self.select[0], self.select[1], self.select[2], self.select[3]))
                     else:
                         os.system( cmdstring.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
                 else:
                     cmdstring = 'region_extraction.py -l {} -r {} -tn {} -wd {}'
                     if '-ms' in cmds:
-                        os.system((cmdstring+'-m -c {}').format(layer, sram, 20, os.path.abspath(os.getcwd()), self.select))
+                        os.system((cmdstring+'-m -c {} {} {} {}').format(layer, sram, 20, os.path.abspath(os.getcwd()), self.select[0], self.select[1], self.select[2], self.select[3]))
                     else:
                         os.system(cmdstring.format(layer, sram, 20, os.path.abspath(os.getcwd())))
 
