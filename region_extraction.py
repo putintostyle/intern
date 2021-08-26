@@ -20,7 +20,7 @@ parser.add_argument('-o', '--file_name', help = 'specify the file name of output
 parser.add_argument('-tn', '--tree_number', type = int, help = 'the minimum leaf')
 parser.add_argument('-wd', '--working_dir', help = 'where data is stored') ## path exclude __tunning__
 parser.add_argument('--manul',action='store_true', help = 'where data is stored')
-parser.add_argument('-c', '--constraint',nargs='+', help = 'specify tune region')
+parser.add_argument('-c', '--constraint',nargs='+',  help = 'specify tune region')
 parameters = parser.parse_args()
 
 
@@ -47,7 +47,7 @@ Ct_err = data[logi_pool][:,2]
 Cc_err = data[logi_pool][:,3]
 
 if parameters.manul:
-    constraint = np.array(parameters.constraint)
+    constraint = np.array([int(i) for i in  parameters.constraint])
     constraint_data = (data[logi_pool][:,4]>constraint[0]) & (data[logi_pool][:,4]<constraint[1]) & (data[logi_pool][:,5]>constraint[2]) & (data[logi_pool][:,5]<constraint[3])
     CD = data[logi_pool][:,4][constraint_data]
     SP = data[logi_pool][:,5][constraint_data]
