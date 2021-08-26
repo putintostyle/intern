@@ -100,6 +100,7 @@ class QAAnalyzerShell(QAShellBase):
         """TODO: to be defined. """
         QAShellBase.__init__(self)
         self.qa_analyzer = qa_analyzer
+        self.select = None
 
     def do_global(self, args, calibration=False):
         """Select all cases. e.g. g [wext]"""
@@ -213,56 +214,56 @@ class QAAnalyzerShell(QAShellBase):
         layer = self.qa_analyzer.settings.layer[0]
         sram = self.qa_analyzer.settings.sram[0]
         current_path = os.path.join(os.path.abspath(os.getcwd()))
-        if ('-ms' in cmds )& (self.select == None):
+        if ('-ms' in cmds ) & (self.select == None):
             print('please select a region with using mancal')
-        
-        if '-f' in cmds:
-            file_operation = cmds[cmds.index('-f')+1]
-            if file_operation == 'auto':
-                
+        else:
+            if '-f' in cmds:
+                file_operation = cmds[cmds.index('-f')+1]
+                if file_operation == 'auto':
+                    
+                    if '-t' in cmds:
+                        tree_number = cmds[cmds.index('-t')+1]
+                        cmdstring = 'region_extraction.py -l {} -r {} --case_file_name -tn {} -wd{}'
+                        if '-ms' in cmds:
+                            os.system( (cmdstring+'-m -c {}').format(layer, sram, tree_number, os.path.abspath(os.getcwd()), self.select))
+                        else:
+                            os.system( (cmdstring).format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
+                    else:
+                        cmdstring = 'region_extraction.py -l {} -r {} --case_file_name -wd{}'
+                        if '-ms' in cmds:
+                            os.system( (cmdstring+' -m -c {}').format(layer, sram, os.path.abspath(os.getcwd()), self.select))
+                        else:
+                            os.system( (cmdstring).format(layer, sram, os.path.abspath(os.getcwd())))
+
+                else:
+                    
+                    if '-t' in cmds:
+                        tree_number = cmds[cmds.index('-t')+1]
+                        cmdstring = 'region_extraction.py -l {} -r {} --manul_file_name {} -tn {} -wd{}'
+                        if '-ms' in cmds:
+                            os.system( (cmdstring+'-m -c {}').format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd()), self.select))
+                        else:
+                            os.system( cmdstring.format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd())))
+                    else:
+                        cmdstring = 'region_extraction.py -l {} -r {} --manul_file_name {} -wd{}'
+                        if '-ms' in cmds:
+                            os.system( (cmdstring+'-m -c {}').format(layer, sram, file_operation, os.path.abspath(os.getcwd()), self.select))
+                        else:
+                            os.system(cmdstring.format(layer, sram, file_operation, os.path.abspath(os.getcwd())))
+            else:
                 if '-t' in cmds:
                     tree_number = cmds[cmds.index('-t')+1]
-                    cmdstring = 'region_extraction.py -l {} -r {} --case_file_name -tn {} -wd{}'
+                    cmdstring = 'region_extraction.py -l {} -r {} -tn {} -wd {}'
                     if '-ms' in cmds:
                         os.system( (cmdstring+'-m -c {}').format(layer, sram, tree_number, os.path.abspath(os.getcwd()), self.select))
                     else:
-                        os.system( (cmdstring).format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
+                        os.system( cmdstring.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
                 else:
-                    cmdstring = 'region_extraction.py -l {} -r {} --case_file_name -wd{}'
+                    cmdstring = 'region_extraction.py -l {} -r {} -tn {} -wd {}'
                     if '-ms' in cmds:
-                        os.system( (cmdstring+' -m -c {}').format(layer, sram, os.path.abspath(os.getcwd()), self.select))
+                        os.system((cmdstring+'-m -c {}').format(layer, sram, 20, os.path.abspath(os.getcwd()), self.select))
                     else:
-                        os.system( (cmdstring).format(layer, sram, os.path.abspath(os.getcwd())))
-
-            else:
-                
-                if '-t' in cmds:
-                    tree_number = cmds[cmds.index('-t')+1]
-                    cmdstring = 'region_extraction.py -l {} -r {} --manul_file_name {} -tn {} -wd{}'
-                    if '-ms' in cmds:
-                        os.system( (cmdstring+'-m -c {}').format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd()), self.select))
-                    else:
-                        os.system( cmdstring.format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd())))
-                else:
-                    cmdstring = 'region_extraction.py -l {} -r {} --manul_file_name {} -wd{}'
-                    if '-ms' in cmds:
-                        os.system( (cmdstring+'-m -c {}').format(layer, sram, file_operation, os.path.abspath(os.getcwd()), self.select))
-                    else:
-                        os.system(cmdstring.format(layer, sram, file_operation, os.path.abspath(os.getcwd())))
-        else:
-            if '-t' in cmds:
-                tree_number = cmds[cmds.index('-t')+1]
-                cmdstring = 'region_extraction.py -l {} -r {} -tn {} -wd {}'
-                if '-ms' in cmds:
-                    os.system( (cmdstring+'-m -c {}').format(layer, sram, tree_number, os.path.abspath(os.getcwd()), self.select))
-                else:
-                    os.system( cmdstring.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
-            else:
-                cmdstring = 'region_extraction.py -l {} -r {} -tn {} -wd {}'
-                if '-ms' in cmds:
-                    os.system((cmdstring+'-m -c {}').format(layer, sram, 20, os.path.abspath(os.getcwd()), self.select))
-                else:
-                    os.system(cmdstring.format(layer, sram, 20, os.path.abspath(os.getcwd())))
+                        os.system(cmdstring.format(layer, sram, 20, os.path.abspath(os.getcwd())))
 
     def do_autocal(self,args):
         if not self.qa_analyzer.calibrator:
@@ -329,7 +330,7 @@ class QAAnalyzerShell(QAShellBase):
         print('closed selector')
     def do_mancal(self, args):
         # usage: mancal 
-        cmds = args.aplit()
+        cmds = args.split()
         self.select = self.qa_analyzer.plot(init = True , select = True, read = False)
         
 

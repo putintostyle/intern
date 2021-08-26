@@ -17,9 +17,9 @@ SP = data[logi_pool][:,5]
 train_X = np.array([[CD[i], SP[i]] for i in range(0, len(CD), 2)])
 train_Y = np.array([(Ct_err[i]*parameter[i+1][0]-Ct_err[i+1]*parameter[i][0])/(Ct_err[i]-Ct_err[i+1]) for i in range(0, len(Ct_err), 2)])
 
-from sklearn.model_selection import train_test_split
-regressor = DecisionTreeRegressor(random_state=0, min_samples_leaf = 5)
-regressor.fit(train_X, train_Y)
+# from sklearn.model_selection import train_test_split
+# regressor = DecisionTreeRegressor(random_state=0, min_samples_leaf = 5)
+# regressor.fit(train_X, train_Y)
 # X_train, X_test, y_train, y_test = train_test_split(train_X, train_Y, test_size=0.20,
 #                                                     random_state=0,
 #                                                     shuffle=True
@@ -37,13 +37,16 @@ regressor.fit(train_X, train_Y)
 # ax.set_zlabel('estimated adjustment')
 # plt.show()
 # plt.clf()
-# fig, ax = plt.subplots()
-# ax.scatter(train_X[:,0], train_X[:,1], s = [abs(Ct_err[i])*60 for i in range(0, len(Ct_err), 2)], c = [np.sign(Ct_err[i])*20 for i in range(0, len(Ct_err), 2)], cmap = 'PRGn', alpha=0.5)
-# ax.set_xlabel('width')
-# ax.set_ylabel('Spacing')
-# plt.legend()
-# plt.show()
+cs = np.array([(Ct_err[i])*60 for i in range(0, len(Ct_err), 2)])
+fig, ax = plt.subplots()
+ax.scatter(train_X[:,0][cs>0], train_X[:,1][cs>0], s = [abs(i) for i in cs[cs>0]], c = [np.sign(i)*20 for i in cs[cs>0]], cmap = 'PRGn_r', alpha=0.5, label = 'error < 0')
+ax.scatter(train_X[:,0][cs<=0], train_X[:,1][cs<=0], s = [abs(i) for i in cs[cs<=0]], c = [np.sign(i)*20 for i in cs[cs<=0]], cmap = 'PRGn', alpha=0.5, label = 'error >= 0')
+ax.set_xlabel('width')
+ax.set_ylabel('Spacing')
 
+plt.legend()
+plt.show()
+"""
 X = np.linspace(0, 1, 100)
 Y = []
 for i in X:
@@ -67,13 +70,21 @@ for i in range(0,len(Y)):
     mse.append([tmp_1, tmp_2])
 mse = np.array(mse)
 
-plt.xlabel('data')
-plt.ylabel('Mean square error')
-plt.plot(X, mse[:,0], 'r', label = 'region 1')
-plt.plot(X, mse[:,1], 'b', label = 'region 2')
+# plt.xlabel('data')
+# plt.ylabel('Mean square error')
+# plt.plot(X, mse[:,0], 'r', label = 'region 1')
+# plt.plot(X, mse[:,1], 'b', label = 'region 2')
+# plt.legend()
+# plt.savefig('data with mse.png')
+plt.clf()
+x = np.linspace(0, 1, 1000)
+y_1 = np.exp(-(x-0.2)**2/0.01)
+y_2 = np.exp(-(x-0.5)**2/0.1)
+plt.plot(x, y_1, 'b--', label="$y_1$ = $d_i$=0.2 $\epsilon$=0.01")
+plt.plot(x, y_2, 'r--', label="$y_2$ = $d_i$=0.5 $\epsilon$=0.1")
+plt.plot(x, 0.5*y_1+0.2*y_2, 'green', label = "$0.5y_1+0.2y_2$")
 plt.legend()
-plt.savefig('data with mse.png')
-
+plt.show()
 # x_min, x_max = train_X[:, 0].min() - 1, train_X[:, 0].max() + 1
 # y_min, y_max = train_X[:, 1].min() - 1, train_X[:, 1].max() + 1
 
@@ -95,3 +106,4 @@ plt.savefig('data with mse.png')
 # plt.xlabel('Width')
 # plt.ylabel('Spacing')
 # plt.show()
+"""
