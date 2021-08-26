@@ -67,8 +67,11 @@ def split(array, dim, thred):
         return [[np.min(array[0]), thred], array[1]],  [[thred, np.max(array[0])], array[1]]
     elif dim == 1:
         return [array[0], [np.min(array[1]), thred]],  [array[0], [thred, np.max(array[1])]]
-
-interval = [[0,1000], [0,1000]]
+if parameters.manul:
+    constraint = np.array([int(float(i)) for i in  parameters.constraint])
+    interval = [[constraint[0],constraint[1]], [constraint[2],constraint[3]]]
+else:
+    interval = [[0,1000], [0,1000]]
 left_children = [interval]
 right_children = [interval]
 right_remove_idx = False
