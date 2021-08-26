@@ -791,22 +791,25 @@ class QAWidthAnalyzer(QAAnalyzerBase):
         wm = window_motion(fig, ax)
         wm.connect()
         plt.show()
-        
+        CD1 = wm.region[0][0]
+        CD2 = wm.region[1][0]
+        SP1 = wm.region[0][1]
+        SP2 = wm.region[1][1]
         if read:
             sel_region = []
             if init:
                 for pts in self.init:
-                    if (list(pts)[2] >= wm.region[0][0]) & (list(pts)[2] <= wm.region[1][0]) & (list(pts)[3] >= wm.region[0][1]) & (list(pts)[3] <= wm.region[1][1]):
+                    if ((list(pts)[2] >= CD1) & (list(pts)[2] <= CD2) & (list(pts)[3] >= SP1) & (list(pts)[3] <= SP2)):
                         sel_region.append(pts)
             else:
                 for pts in self.last_results:
-                    if (list(pts)[2] >= wm.region[0][0]) & (list(pts)[2] <= wm.region[1][0]) & (list(pts)[3] >= wm.region[0][1]) & (list(pts)[3] <= wm.region[1][1]):
+                    if ((list(pts)[2] >= CD1) & (list(pts)[2] <= CD2) & (list(pts)[3] >= SP1) & (list(pts)[3] <= SP2)):
                         sel_region.append(pts)
             self.print_statistics(sel_region)
-            self.settings.CDSP_range_param['CD1'] = wm.region[0][0]
-            self.settings.CDSP_range_param['CD2'] = wm.region[1][0]
-            self.settings.CDSP_range_param['SP1'] = wm.region[0][1]
-            self.settings.CDSP_range_param['SP2'] = wm.region[1][1]
+            self.settings.CDSP_range_param['CD1'] = CD1
+            self.settings.CDSP_range_param['CD2'] = CD2
+            self.settings.CDSP_range_param['SP1'] = SP1
+            self.settings.CDSP_range_param['SP2'] = SP2
             self.settings.CDSP_range_param['wext'] = None
             # self.build_regression_data(None)
             # self.calculate_expected_wext(None) #XXX: need refactor
@@ -814,7 +817,7 @@ class QAWidthAnalyzer(QAAnalyzerBase):
 
             
         elif select:        
-            return wm.region
+            return [CD1, CD2, SP1, SP2]
 
 
     def output_wext_fit_result(self, plot_result = True, show_plot = True, plot_path = "QA_result_wext_fit.png"):
