@@ -20,7 +20,7 @@ parser.add_argument('-o', '--file_name', help = 'specify the file name of output
 parser.add_argument('-tn', '--tree_number', type = int, help = 'the minimum leaf')
 parser.add_argument('-wd', '--working_dir', help = 'where data is stored') ## path exclude __tunning__
 parser.add_argument('--manul',action='store_true', help = 'where data is stored')
-parser.add_argument('-c', '--constraint',help = 'specify tune region')
+parser.add_argument('-c', '--constraint',type = list, help = 'specify tune region')
 parameters = parser.parse_args()
 
 
