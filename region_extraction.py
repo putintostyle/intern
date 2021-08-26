@@ -19,6 +19,8 @@ parser.add_argument("--manul_file_name", action='store_true', help='named the ou
 parser.add_argument('-o', '--file_name', help = 'specify the file name of output rules')
 parser.add_argument('-tn', '--tree_number', type = int, help = 'the minimum leaf')
 parser.add_argument('-wd', '--working_dir', help = 'where data is stored') ## path exclude __tunning__
+parser.add_argument('--manul',action='store_true', help = 'where data is stored')
+parser.add_argument('-c', '--constraint',help = 'specify tune region')
 parameters = parser.parse_args()
 
 
@@ -43,13 +45,21 @@ else:
 parameter = df_keys[logi_pool][:,1]
 Ct_err = data[logi_pool][:,2]
 Cc_err = data[logi_pool][:,3]
-CD = data[logi_pool][:,4]   
-SP = data[logi_pool][:,5]
 
+if parameters.manul:
+    constraint = np.array(parameters.constraint)
+    constraint_data = (data[logi_pool][:,4]>constraint[0]) & (data[logi_pool][:,4]<constraint[1]) & (data[logi_pool][:,5]>constraint[2]) & (data[logi_pool][:,5]<constraint[3])
+    CD = data[logi_pool][:,4][constraint_data]
+    SP = data[logi_pool][:,5][constraint_data]
+    train_Y = np.array([(Ct_err[i]*parameter[i+1][0]-Ct_err[i+1]*parameter[i][0])/(Ct_err[i]-Ct_err[i+1]) for i in range(0, len(Ct_err), 2)])
+    train_Y = train_Y[constraint_data]
+
+else:
+    CD = data[logi_pool][:,4]
+    SP = data[logi_pool][:,5]
+    train_Y = np.array([(Ct_err[i]*parameter[i+1][0]-Ct_err[i+1]*parameter[i][0])/(Ct_err[i]-Ct_err[i+1]) for i in range(0, len(Ct_err), 2)])
 train_X = np.array([[CD[i], SP[i]] for i in range(0, len(CD), 2)])
 #(Ct_err1*wext2 - Ct_err2*wext1)/(Ct_err1 - Ct_err2)
-train_Y = np.array([(Ct_err[i]*parameter[i+1][0]-Ct_err[i+1]*parameter[i][0])/(Ct_err[i]-Ct_err[i+1]) for i in range(0, len(Ct_err), 2)])
-
 regressor = DecisionTreeRegressor(random_state=0, min_samples_leaf = parameters.tree_number)
 regressor.fit(train_X, train_Y)
 def split(array, dim, thred):
