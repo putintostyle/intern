@@ -115,7 +115,12 @@ class QAAnalyzerShell(QAShellBase):
     
     def do_gc(self, args):
         """Select all cases with applying calibration. e.g. gc"""
-        self.do_global(args, calibration=True)
+        if self.manulcal:
+            print('the stat in selected area is\n')
+            selectRegion = str(int(float(self.select[0])))+' '+str(int(float(self.select[1])))+' '+str(int(float(self.select[2])))+' '+str(int(float(self.select[3])))
+            self.do_range(self.select, calibration=True)
+        else:
+            self.do_global(args, calibration=True)
 
     def do_range(self, args, calibration=False):
         """Select cases in width(CD)/space(SP) range. e.g. r <CD1> <CD2> <SP1> <SP2> [wext]"""
@@ -331,6 +336,7 @@ class QAAnalyzerShell(QAShellBase):
     def do_mancal(self, args):
         # usage: mancal 
         cmds = args.split()
+        self.manulcal = True
         self.select = self.qa_analyzer.plot(init = True , select = True, read = False)
         
 
