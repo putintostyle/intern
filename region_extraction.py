@@ -47,7 +47,7 @@ Ct_err = data[logi_pool][:,2]
 Cc_err = data[logi_pool][:,3]
 
 if parameters.manul:
-    constraint = np.array([int(i) for i in  parameters.constraint])
+    constraint = np.array([int(float(i)) for i in  parameters.constraint])
     constraint_data = (data[logi_pool][:,4]>constraint[0]) & (data[logi_pool][:,4]<constraint[1]) & (data[logi_pool][:,5]>constraint[2]) & (data[logi_pool][:,5]<constraint[3])
     CD = data[logi_pool][:,4][constraint_data]
     SP = data[logi_pool][:,5][constraint_data]
