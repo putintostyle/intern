@@ -181,6 +181,7 @@ class QAAnalyzerShell(QAShellBase):
         """Plot last results"""
         self.qa_analyzer.plot_last_result()
     def do_calfile(self, args):
+        # usage: calfile filename
         if not self.qa_analyzer.calibrator:
             self.qa_analyzer.calibrator = Calibrator()
         # print(self.qa_analyzer.settings.layer)
@@ -207,33 +208,62 @@ class QAAnalyzerShell(QAShellBase):
             elif ('.csv' not in cmds[0]):
                 print("require csv file")
     def do_autotune(self, args):
-        # usage: -f file_name(auto), -t tree_number 
+        # usage: -f file_name(auto), -t tree_number -ms 
         cmds = args.split()
         layer = self.qa_analyzer.settings.layer[0]
         sram = self.qa_analyzer.settings.sram[0]
         current_path = os.path.join(os.path.abspath(os.getcwd()))
-
+        if ('-ms' in cmds )& (self.select == None):
+            print('please select a region with using mancal')
+        
         if '-f' in cmds:
             file_operation = cmds[cmds.index('-f')+1]
             if file_operation == 'auto':
+                
                 if '-t' in cmds:
                     tree_number = cmds[cmds.index('-t')+1]
-                    os.system('region_extraction.py -l {} -r {} --case_file_name -tn {} -wd{}'.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
+                    cmdstring = 'region_extraction.py -l {} -r {} --case_file_name -tn {} -wd{}'
+                    if '-ms' in cmds:
+                        os.system( (cmdstring+'-m -c {}').format(layer, sram, tree_number, os.path.abspath(os.getcwd()), self.select))
+                    else:
+                        os.system( (cmdstring).format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
                 else:
-                    os.system('region_extraction.py -l {} -r {} --case_file_name -wd {}'.format(layer, sram, os.path.abspath(os.getcwd())))
+                    cmdstring = 'region_extraction.py -l {} -r {} --case_file_name -wd{}'
+                    if '-ms' in cmds:
+                        os.system( (cmdstring+' -m -c {}').format(layer, sram, os.path.abspath(os.getcwd()), self.select))
+                    else:
+                        os.system( (cmdstring).format(layer, sram, os.path.abspath(os.getcwd())))
 
             else:
+                
                 if '-t' in cmds:
                     tree_number = cmds[cmds.index('-t')+1]
-                    os.system('region_extraction.py -l {} -r {} --manul_file_name {} -tn {} -wd{}'.format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd())))
+                    cmdstring = 'region_extraction.py -l {} -r {} --manul_file_name {} -tn {} -wd{}'
+                    if '-ms' in cmds:
+                        os.system( (cmdstring+'-m -c {}').format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd()), self.select))
+                    else:
+                        os.system( cmdstring.format(layer, sram, file_operation, tree_number, os.path.abspath(os.getcwd())))
                 else:
-                    os.system('region_extraction.py -l {} -r {} --manul_file_name {} -wd {}'.format(layer, sram, file_operation, os.path.abspath(os.getcwd())))
+                    cmdstring = 'region_extraction.py -l {} -r {} --manul_file_name {} -wd{}'
+                    if '-ms' in cmds:
+                        os.system( (cmdstring+'-m -c {}').format(layer, sram, file_operation, os.path.abspath(os.getcwd()), self.select))
+                    else:
+                        os.system(cmdstring.format(layer, sram, file_operation, os.path.abspath(os.getcwd())))
         else:
             if '-t' in cmds:
                 tree_number = cmds[cmds.index('-t')+1]
-                os.system('region_extraction.py -l {} -r {} -tn {} -wd {}'.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
+                cmdstring = 'region_extraction.py -l {} -r {} -tn {} -wd {}'
+                if '-ms' in cmds:
+                    os.system( (cmdstring+'-m -c {}').format(layer, sram, tree_number, os.path.abspath(os.getcwd()), self.select))
+                else:
+                    os.system( cmdstring.format(layer, sram, tree_number, os.path.abspath(os.getcwd())))
             else:
-                os.system('region_extraction.py -l {} -r {} -tn {} -wd {}'.format(layer, sram, 20, os.path.abspath(os.getcwd())))
+                cmdstring = 'region_extraction.py -l {} -r {} -tn {} -wd {}'
+                if '-ms' in cmds:
+                    os.system((cmdstring+'-m -c {}').format(layer, sram, 20, os.path.abspath(os.getcwd()), self.select))
+                else:
+                    os.system(cmdstring.format(layer, sram, 20, os.path.abspath(os.getcwd())))
+
     def do_autocal(self,args):
         if not self.qa_analyzer.calibrator:
             self.qa_analyzer.calibrator = Calibrator()
@@ -259,10 +289,10 @@ class QAAnalyzerShell(QAShellBase):
     # shortcuts
 
     def do_regioncal(self, args):
-        #usage: regioncal [-s] [-show] region
+        #usage: regioncal [-print] region
         cmds = [int(i) for i  in args.split()]
         
-        self.qa_analyzer.calibrator.specify_region(cmds[-4:], isprint=('-s' in cmds))
+        self.qa_analyzer.calibrator.specify_region(cmds[-4:], isprint=('-print' in cmds))
                 
         for seg_region in self.qa_analyzer.calibrator.segment_rule:
             self.qa_analyzer.settings.CDSP_range = True
@@ -276,11 +306,7 @@ class QAAnalyzerShell(QAShellBase):
             self.qa_analyzer.region_run()
         print('='*80)
         self.qa_analyzer.calibrator.clean_region()
-    ## To do
-    def do_diff (self, region): # show statistical info and plot the difference
-        
-        pass
-    ## def do_selregion () ginput to draw the region to cal
+    
 
 
     def do_regionsel(self, args):
@@ -299,8 +325,14 @@ class QAAnalyzerShell(QAShellBase):
             select_region = self.qa_analyzer.plot(init = (os_flag|or_flag) , select = True, read = False)
         else:
             self.qa_analyzer.plot(init = (os_flag|or_flag) , select = False, read = True)
-        
+        print(select_region)
         print('closed selector')
+    def do_mancal(self, args):
+        # usage: mancal 
+        cmds = args.aplit()
+        self.select = self.qa_analyzer.plot(init = True , select = True, read = False)
+        
+
 
          
     do_g = do_global
