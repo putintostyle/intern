@@ -101,7 +101,7 @@ class QAAnalyzerShell(QAShellBase):
         QAShellBase.__init__(self)
         self.qa_analyzer = qa_analyzer
         self.select = None
-
+        self.manulcal = False
     def do_global(self, args, calibration=False):
         """Select all cases. e.g. g [wext]"""
         self.qa_analyzer.settings.CDSP_range = False
@@ -118,7 +118,7 @@ class QAAnalyzerShell(QAShellBase):
         if self.manulcal:
             print('the stat in selected area is\n')
             selectRegion = str(int(float(self.select[0])))+' '+str(int(float(self.select[1])))+' '+str(int(float(self.select[2])))+' '+str(int(float(self.select[3])))
-            self.do_range(self.select, calibration=True)
+            self.do_range(selectRegion, calibration=True)
         else:
             self.do_global(args, calibration=True)
 
