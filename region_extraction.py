@@ -52,7 +52,7 @@ if parameters.manul:
     CD = data[logi_pool][:,4][constraint_data]
     SP = data[logi_pool][:,5][constraint_data]
     train_Y = np.array([(Ct_err[i]*parameter[i+1][0]-Ct_err[i+1]*parameter[i][0])/(Ct_err[i]-Ct_err[i+1]) for i in range(0, len(Ct_err), 2)])
-    train_Y = train_Y[constraint_data]
+    train_Y = train_Y[[constraint_data[i] for i in range(0, len(constraint_data), 2)]]
 
 else:
     CD = data[logi_pool][:,4]
